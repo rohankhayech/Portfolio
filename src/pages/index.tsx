@@ -3,8 +3,9 @@ import { Inter } from 'next/font/google'
 import Header from '@/components/Header'
 import Stack from '@mui/material/Stack'
 import Section from '@/components/Section'
-import Project from '@/components/Project'
+import ProjectCard from '@/components/ProjectCard'
 import Typography from '@mui/material/Typography'
+import ExperienceCard from '@/components/ExperienceCard'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,14 +35,14 @@ export default function Home() {
             spacing={2}
             sx={{flexWrap:"wrap"}}
           >
-            <Project 
+            <ProjectCard 
               name="ATel Lookup" 
               desc="Powerful web-based search interface for intelligently querying and visualising reports from The Astronomer's Telegram." 
               langs={["Python", "Typescript"]}
               frameworks={["Flask", "Angular", "Docker"]}
               platforms={["Web"]}
             />
-            <Project 
+            <ProjectCard 
               name="Choona" 
               desc="Guitar tuner app for Android with support for custom tunings."
               langs={["Kotlin", "Java"]}
@@ -50,9 +51,57 @@ export default function Home() {
             />
           </Stack>
         </Section>
-        <Section title="Education"></Section>
-        <Section title="Work Experience"></Section>
-        <Section title="Skills"></Section>
+        <Section title="Education">
+          <Stack
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="center"
+            spacing={2}
+          >
+            <ExperienceCard
+              title="Graduate Diploma in Professional Engineering (Electrical Engineering)"
+              organisation='Curtin University'
+              startYear='2022'
+              endYear='2022'
+              skills={["Teamwork", "Communication"]}
+            />
+            <ExperienceCard
+              title="Bachelor of Science (Computing) with Distinction"
+              organisation='Curtin University'
+              startYear='2019'
+              endYear='2021'
+              skills={["Java", "Git", "Algorithms"]}
+            />
+            <ExperienceCard
+              title="WACE"
+              organisation='Shenton College'
+              startYear='2014'
+              endYear='2018'
+              skills={["Algorithms", "Data Structures", "Python"]}
+            />
+          </Stack>
+        </Section>
+        <Section title="Work Experience">
+          <ExperienceCard
+            title="Bar Staff"
+            organisation='Indian Ocean Hotel'
+            startYear='2021'
+            startMonth='Dec'
+            skills={["Teamwork", "Communication"]}
+          />
+          <ExperienceCard
+            title="Administrative Assistant"
+            organisation='MPA Skills'
+            startYear='2019'
+            startMonth='Jan'
+            endYear='2021'
+            endMonth='Dec'
+            skills={["Teamwork", "Communication", "Microsoft Excel"]}
+          />
+        </Section>
+        <Section title="Skills">
+
+        </Section>
       </Stack>
     </main>
   )

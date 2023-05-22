@@ -15,7 +15,7 @@ interface ProjectProps {
     frameworks?: string[]
 }
 
-export default function Project({name, desc, platforms = [], langs = [], frameworks = []}: ProjectProps) {
+export default function ProjectCard({name, desc, platforms = [], langs = [], frameworks = []}: ProjectProps) {
     return (
         <Card variant="outlined" sx={{ width: 384, height: 256 }}>
             <CardContent>
