@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import Header from '@/components/Header'
 import Stack from '@mui/material/Stack'
@@ -30,8 +29,6 @@ export default function Home() {
         <Section title='Software Portfolio'>
           <Stack
             direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
             spacing={2}
             sx={{flexWrap:"wrap"}}
           >
@@ -54,8 +51,6 @@ export default function Home() {
         <Section title="Education">
           <Stack
             direction="column"
-            justifyContent="flex-start"
-            alignItems="center"
             spacing={2}
           >
             <ExperienceCard
