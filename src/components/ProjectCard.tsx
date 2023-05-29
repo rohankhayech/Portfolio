@@ -1,11 +1,11 @@
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Chip from "@mui/material/Chip";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import { 
+    Card, 
+    CardContent, 
+    Link, 
+    Stack, 
+    Typography 
+} from "@mui/material";
+import TagChipGroup from "./TagChipGroup";
 
 interface ProjectProps { 
     name: string, 
@@ -17,53 +17,32 @@ interface ProjectProps {
 
 export default function ProjectCard({name, desc, platforms = [], langs = [], frameworks = []}: ProjectProps) {
     return (
-        <Card variant="outlined" sx={{ width: 384, height: 256 }}>
+        <Card 
+            variant="outlined" 
+            sx={{ 
+                minWidth: 224, 
+                maxWidth: 448,
+                maxHeight: 224 
+            }}
+        >
             <CardContent>
                 <Stack
                     direction="column"
-                    justifyContent="center"
-                    alignItems="flex-start"
-                    spacing={2}
+                    spacing={1}
                 >
-                    <Link variant="h6">{name}</Link>
-                    <Typography variant="body1">{desc}</Typography>
-                    <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={1}
-                        sx={{ flexWrap: "wrap" }}
-                    >
-                        {langs.map(lang => (
-                            <Chip 
-                                key={"lg-" + lang} 
-                                label={lang} 
-                                size="small"
-                                variant="outlined"
-                            />
-                        ))}
-                        {platforms.map(platform => (
-                            <Chip
-                                key={"pf-" + platform}
-                                label={platform}
-                                size="small"
-                                variant="outlined"
-                            />
-                        ))}
-                        {frameworks.map(framework => (
-                            <Chip 
-                                key={"fw-"+framework} 
-                                label={framework} 
-                                size="small"
-                                variant="outlined" 
-                            />
-                        ))}
-                    </Stack>
+                    <Link variant="subtitle1">{name}</Link>
+                    <Typography variant="body2">{desc}</Typography>
+                    <TagChipGroup items={langs} keyPrefix="lg" leadingIcon="data_object"/>
+                    <TagChipGroup items={platforms} keyPrefix="pf" leadingIcon="devices" />
+                    <TagChipGroup items={frameworks} keyPrefix="fw" leadingIcon="dynamic_form" />
                 </Stack>
             </CardContent>
+            {/* 
             <CardActions>
                 <Button>View on Github</Button>
-            </CardActions>
+            </CardActions> 
+            */}
         </Card>
     )
 }
+

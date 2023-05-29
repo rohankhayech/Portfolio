@@ -1,8 +1,5 @@
-import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
-import Chip from "@mui/material/Chip"
-import Stack from "@mui/material/Stack"
-import Typography from "@mui/material/Typography"
+import { Card, CardContent, Stack, Typography } from "@mui/material"
+import TagChipGroup from "./TagChipGroup"
 
 interface ExperienceCardProps {
     title: string,
@@ -16,35 +13,18 @@ interface ExperienceCardProps {
 
 export default function ExperienceCard({title, organisation, startYear, startMonth, endYear, endMonth, skills = []}: ExperienceCardProps) {
     return (
-        <Card variant="outlined" sx={{ width: 384, height: 256 }}>
+        <Card variant="outlined">
             <CardContent>
                 <Stack
                     direction="column"
-                    justifyContent="center"
-                    alignItems="flex-start"
-                    spacing={2}
+                    spacing={1}
                 >
                     <Typography variant="h6">{title}</Typography>
                     <Typography variant="subtitle1">{organisation}</Typography>
                     <Typography variant="subtitle2">
                         {`${startMonth ?? ""} ${startYear} - ${endMonth ?? ""} ${endYear ?? "Present"}`}
                     </Typography>
-                    <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={1}
-                        sx={{ flexWrap: "wrap" }}
-                    >
-                        {skills.map(skill => (
-                            <Chip
-                                key={`${title}-skl-${skill}`}
-                                label={skill}
-                                size="small"
-                                variant="outlined"
-                            />
-                        ))}
-                    </Stack>
+                    <TagChipGroup items={skills} keyPrefix="sk" leadingIcon="design_services"/>
                 </Stack>
             </CardContent>
         </Card>
