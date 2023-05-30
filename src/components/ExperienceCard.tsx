@@ -24,7 +24,7 @@ export default function ExperienceCard({title, organisation, startYear, startMon
                     <Typography variant="subtitle2">
                         {`${startMonth ?? ""} ${startYear} - ${endMonth ?? ""} ${endYear ?? "Present"}`}
                     </Typography>
-                    <TagChipGroup items={skills} keyPrefix="sk" leadingIcon="design_services"/>
+                    <TagChipGroup items={skills} title="Skills" keyPrefix="sk" leadingIcon="design_services"/>
                 </Stack>
             </CardContent>
         </Card>

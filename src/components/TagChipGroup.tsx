@@ -1,6 +1,6 @@
 /* Copyright (c) 2023 Rohan Khayech */
 
-import { Chip, Icon, Stack } from "@mui/material";
+import { AvatarGroup, Chip, Icon, Stack, Tooltip } from "@mui/material";
 
 /**
  * UI element containing a row of tag chips with a leading icon.
@@ -10,7 +10,8 @@ import { Chip, Icon, Stack } from "@mui/material";
  * 
  * @author Rohan Khayech
  */
-export default function TagChipGroup(props: { items: string[], keyPrefix: string, leadingIcon: string }) {
+export default function TagChipGroup(props: { items: string[], keyPrefix: string, title: string, leadingIcon: string }) {
+    const MAX_ITEMS = 4
     return (<>
         {props.items.length > 0 &&
             <Stack
@@ -18,8 +19,10 @@ export default function TagChipGroup(props: { items: string[], keyPrefix: string
                 alignItems="center"
                 spacing={1}
             >
-                <Icon fontSize="small">{props.leadingIcon}</Icon>
-                {props.items.map(item => (
+                <Tooltip title={props.title} placement="right">
+                    <Icon fontSize="small">{props.leadingIcon}</Icon>
+                </Tooltip>
+                {props.items.slice(0,MAX_ITEMS).map(item => (
                     <Chip
                         key={`${props.keyPrefix}-` + item}
                         label={item}
@@ -27,6 +30,17 @@ export default function TagChipGroup(props: { items: string[], keyPrefix: string
                         variant="outlined"
                     />
                 ))
+                }
+                {props.items.length > MAX_ITEMS &&
+                    <Tooltip 
+                        title={props.items.slice(MAX_ITEMS,props.items.length).join(", ")} 
+                        placement="right"
+                    >
+                        <Chip
+                            label={`+${props.items.length - MAX_ITEMS}`}
+                            size="small"
+                        />
+                    </Tooltip>
                 }
             </Stack>
         }

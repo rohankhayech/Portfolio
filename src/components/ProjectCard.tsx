@@ -6,42 +6,24 @@ import {
     Typography 
 } from "@mui/material";
 import TagChipGroup from "./TagChipGroup";
+import Project from "@/model/Project";
 
-interface ProjectProps { 
-    name: string, 
-    desc: string,
-    platforms?: string[],
-    langs?: string[],
-    frameworks?: string[]
-}
-
-export default function ProjectCard({name, desc, platforms = [], langs = [], frameworks = []}: ProjectProps) {
+export default function ProjectCard({name, desc, url, platforms = [], langs = [], frameworks = []}: Project) {
     return (
-        <Card 
-            variant="outlined" 
-            sx={{ 
-                minWidth: 224, 
-                maxWidth: 448,
-                maxHeight: 224 
-            }}
-        >
-            <CardContent>
-                <Stack
-                    direction="column"
-                    spacing={1}
-                >
-                    <Link variant="subtitle1">{name}</Link>
-                    <Typography variant="body2">{desc}</Typography>
-                    <TagChipGroup items={langs} keyPrefix="lg" leadingIcon="data_object"/>
-                    <TagChipGroup items={platforms} keyPrefix="pf" leadingIcon="devices" />
-                    <TagChipGroup items={frameworks} keyPrefix="fw" leadingIcon="dynamic_form" />
+        <Card style={{ height: '100%', width: '100%' }} variant="outlined">
+            <CardContent style={{ height: '100%' }}>
+                <Stack style={{ height: '100%' }} direction="column" justifyContent="space-between" spacing={2}>
+                    <Stack direction="column" spacing={1}>
+                        <Link variant="subtitle1" href={url}>{name}</Link>
+                        <Typography variant="body2">{desc}</Typography>
+                    </Stack>
+                    <Stack direction="column" spacing={1}>
+                        <TagChipGroup items={langs} keyPrefix="lg" title="Languages" leadingIcon="data_object"/>
+                        <TagChipGroup items={platforms} keyPrefix="pf" title="Platforms" leadingIcon="devices" />
+                        <TagChipGroup items={frameworks} keyPrefix="fw" title="Frameworks/Libraries" leadingIcon="dynamic_form" />
+                    </Stack>
                 </Stack>
             </CardContent>
-            {/* 
-            <CardActions>
-                <Button>View on Github</Button>
-            </CardActions> 
-            */}
         </Card>
     )
 }

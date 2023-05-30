@@ -5,10 +5,24 @@ import Section from '@/components/Section'
 import ProjectCard from '@/components/ProjectCard'
 import Typography from '@mui/material/Typography'
 import ExperienceCard from '@/components/ExperienceCard'
+import { getGitHubProjects } from '@/lib/projects'
+import Project from '@/model/Project'
+import { Grid } from '@mui/material'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export async function getStaticProps() {
+
+  const projects = await getGitHubProjects()
+
+  return {
+    props: {
+      projects
+    }
+  }
+}
+
+export default function Home({projects}: {projects: Project[]}) {
   return (
     <main>
       <Stack
@@ -27,26 +41,32 @@ export default function Home() {
           </Typography>
         </Section>
         <Section title='Software Portfolio'>
-          <Stack
+          {/*<Stack
             direction="row"
             spacing={2}
             sx={{flexWrap:"wrap"}}
+          >*/}
+          <Grid container 
+            columns={{ sm: 4, md: 8, lg: 12}}
           >
-            <ProjectCard 
-              name="ATel Lookup" 
-              desc="Powerful web-based search interface for intelligently querying and visualising reports from The Astronomer's Telegram." 
-              langs={["Python", "Typescript"]}
-              frameworks={["Flask", "Angular", "Docker"]}
-              platforms={["Web"]}
-            />
-            <ProjectCard 
-              name="Choona" 
-              desc="Guitar tuner app for Android with support for custom tunings."
-              langs={["Kotlin", "Java"]}
-              frameworks={["Jetpack Compose"]}
-              platforms={["Android"]}
-            />
-          </Stack>
+            {projects.map(project => (
+              <Grid item
+                key={'p-${project.name}'}
+                sm={4} md={4} lg={4}
+                sx={{paddingRight: 2, paddingBottom: 2}}
+              >
+                <ProjectCard 
+                  name={project.name}
+                  desc={project.desc}
+                  url={project.url}
+                  langs={project.langs}
+                  platforms={project.platforms}
+                  frameworks={project.frameworks}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          {/*</Stack>*/}
         </Section>
         <Section title="Education">
           <Stack
