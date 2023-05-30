@@ -28,6 +28,10 @@ export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+        />
         <meta name="emotion-insertion-point" content="" />
         {emotionStyleTags}
       </Head>
