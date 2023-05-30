@@ -29,7 +29,7 @@ export async function getGitHubProjects(): Promise<Project[]> {
         .map(async (repo: any) => {
             const {platforms, frameworks} = getRepoPlatformsAndFrameworks(repo.topics)
             return {
-                name: startCase(repo.name),
+                name: (repo.name),
                 desc: repo.description,
                 url: repo.html_url,
                 langs: await getRepoLanguages(repo.name),
@@ -38,6 +38,24 @@ export async function getGitHubProjects(): Promise<Project[]> {
             }
         }
     ))
+}
+
+/**
+ * Formats the project name to title case, with support for custom exceptions.
+ * @param name The repository name.
+ * @returns The formatted project name in title case.
+ */
+function formatProjectName(name: string): string {
+    switch (name) {
+        case "ATel-Lookup":
+            return "ATel Lookup"
+        case "MNK-TicTacToe":
+            return "MNK Tic-Tac-Toe"
+        case "LiftSim":
+            return "Lift Simulator"
+        default:
+            return startCase(name)
+    }
 }
 
 /**
@@ -51,7 +69,9 @@ async function getRepoLanguages(name: string): Promise<string[]> {
         repo: name
     })
     const langs = res.data
-    return Object.keys(langs).map(lang => capitalise(lang))
+    return Object.keys(langs)
+        .filter(lang => lang != 'Makefile' && lang != 'Dockerfile')
+        .map(lang => capitalise(lang))
 }
 
 /**
@@ -74,6 +94,9 @@ function getRepoPlatformsAndFrameworks(topics: string[]): {platforms: string[], 
                 break;
             case 'ios':
                 platforms.push("iOS")
+                break;
+            case 'desktop':
+                platforms.push("Desktop")
                 break;
             case 'windows':
                 platforms.push("windows")
