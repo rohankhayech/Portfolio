@@ -25,7 +25,7 @@ export default function ExperienceCard({title, organisation, startYear, startMon
                     </Stack>
                     <Stack direction="column" spacing={1}>
                         
-                        <TagChipGroup items={skills} title="Skills" keyPrefix="sk" leadingIcon="design_services"/>
+                        <TagChipGroup items={skills} title="Skills" keyPrefix="sk" leadingIcon="design_services" onClick={()=>{}}/>
                     </Stack>
                 </Stack>
             </CardContent>

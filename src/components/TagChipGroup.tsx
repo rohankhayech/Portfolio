@@ -10,7 +10,7 @@ import { AvatarGroup, Chip, Icon, Stack, Tooltip } from "@mui/material";
  * 
  * @author Rohan Khayech
  */
-export default function TagChipGroup(props: { items: string[], keyPrefix: string, title: string, leadingIcon: string }) {
+export default function TagChipGroup(props: { items: string[], keyPrefix: string, title: string, leadingIcon: string, onClick: (item: string) => void }) {
     const MAX_ITEMS = 4
     return (<>
         {props.items.length > 0 &&
@@ -23,12 +23,15 @@ export default function TagChipGroup(props: { items: string[], keyPrefix: string
                     <Icon fontSize="small">{props.leadingIcon}</Icon>
                 </Tooltip>
                 {props.items.slice(0,MAX_ITEMS).map(item => (
-                    <Chip
-                        key={`${props.keyPrefix}-` + item}
-                        label={item}
-                        size="small"
-                        variant="outlined"
-                    />
+                    <Link>
+                        <Chip
+                            key={`${props.keyPrefix}-` + item}
+                            label={item}
+                            size="small"
+                            variant="outlined"
+                            onClick={onClick}
+                        />
+                    </Link>
                 ))
                 }
                 {props.items.length > MAX_ITEMS &&

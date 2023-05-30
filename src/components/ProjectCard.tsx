@@ -18,9 +18,9 @@ export default function ProjectCard({name, desc, url, platforms = [], langs = []
                         <Typography variant="body2">{desc}</Typography>
                     </Stack>
                     <Stack direction="column" spacing={1}>
-                        <TagChipGroup items={langs} keyPrefix="lg" title="Languages" leadingIcon="data_object"/>
-                        <TagChipGroup items={platforms} keyPrefix="pf" title="Platforms" leadingIcon="devices" />
-                        <TagChipGroup items={frameworks} keyPrefix="fw" title="Frameworks/Libraries" leadingIcon="dynamic_form" />
+                        <TagChipGroup items={langs} keyPrefix="lg" title="Languages" leadingIcon="data_object" onClick={() => { }} />
+                        <TagChipGroup items={platforms} keyPrefix="pf" title="Platforms" leadingIcon="devices" onClick={() => { }} />
+                        <TagChipGroup items={frameworks} keyPrefix="fw" title="Frameworks/Libraries" leadingIcon="dynamic_form" onClick={() => { }} />
                     </Stack>
                 </Stack>
             </CardContent>
