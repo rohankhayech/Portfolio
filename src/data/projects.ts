@@ -79,6 +79,11 @@ async function getRepoLanguages(name: string): Promise<string[]> {
         .map(lang => capitalise(lang))
 }
 
+export async function getUserTagline(): Promise<string> {
+    const res = await gh.users.getAuthenticated()
+    return res.data.bio
+}
+
 /**
  * Collates a pair of lists of platforms and frameworks from the repository topics.
  * @param topics List of the repository's topics.
