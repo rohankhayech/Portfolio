@@ -5,24 +5,31 @@ import Section from '@/components/Section'
 import ProjectCard from '@/components/ProjectCard'
 import Typography from '@mui/material/Typography'
 import ExperienceCard from '@/components/ExperienceCard'
-import { getGitHubProjects } from '@/lib/projects'
+import { getGitHubProjects } from '@/data/projects'
 import Project from '@/model/Project'
 import { Grid } from '@mui/material'
+import { getCourses, getJobs } from '@/data/experiences'
+import Experience from '@/model/Experience'
+import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export async function getStaticProps() {
 
   const projects = await getGitHubProjects()
+  const jobs = await getJobs()
+  const courses = await getCourses()
 
   return {
     props: {
-      projects
+      projects,
+      jobs,
+      courses
     }
   }
 }
 
-export default function Home({projects}: {projects: Project[]}) {
+export default function Home({projects, jobs, courses}: {projects: Project[], jobs: Experience[], courses: Experience[]}) {
   return (
     <main>
       <Stack
@@ -41,11 +48,6 @@ export default function Home({projects}: {projects: Project[]}) {
           </Typography>
         </Section>
         <Section title='Software Portfolio'>
-          {/*<Stack
-            direction="row"
-            spacing={2}
-            sx={{flexWrap:"wrap"}}
-          >*/}
           <Grid container 
             columns={{ sm: 4, md: 8, lg: 12}}
           >
@@ -66,53 +68,48 @@ export default function Home({projects}: {projects: Project[]}) {
               </Grid>
             ))}
           </Grid>
-          {/*</Stack>*/}
         </Section>
         <Section title="Education">
-          <Stack
-            direction="column"
-            spacing={2}
+          <Grid container
+            columns={{ sm: 4, md: 8, lg: 12 }}
           >
-            <ExperienceCard
-              title="Graduate Diploma in Professional Engineering (Electrical Engineering)"
-              organisation='Curtin University'
-              startYear='2022'
-              endYear='2022'
-              skills={["Teamwork", "Communication"]}
-            />
-            <ExperienceCard
-              title="Bachelor of Science (Computing) with Distinction"
-              organisation='Curtin University'
-              startYear='2019'
-              endYear='2021'
-              skills={["Java", "Git", "Algorithms"]}
-            />
-            <ExperienceCard
-              title="WACE"
-              organisation='Shenton College'
-              startYear='2014'
-              endYear='2018'
-              skills={["Algorithms", "Data Structures", "Python"]}
-            />
-          </Stack>
+            {courses.map(course => (
+              <Grid item
+                key={`c-${course.title}`}
+                sm={4} md={4} lg={4}
+                sx={{ paddingRight: 2, paddingBottom: 2 }}
+              >
+                <ExperienceCard
+                  title={course.title}
+                  organisation={course.organisation}
+                  startYear={course.startYear}
+                  endYear={course.endYear}
+                  skills={course.skills}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Section>
         <Section title="Work Experience">
-          <ExperienceCard
-            title="Bar Staff"
-            organisation='Indian Ocean Hotel'
-            startYear='2021'
-            startMonth='Dec'
-            skills={["Teamwork", "Communication"]}
-          />
-          <ExperienceCard
-            title="Administrative Assistant"
-            organisation='MPA Skills'
-            startYear='2019'
-            startMonth='Jan'
-            endYear='2021'
-            endMonth='Dec'
-            skills={["Teamwork", "Communication", "Microsoft Excel"]}
-          />
+          <Grid container
+            columns={{ sm: 4, md: 8, lg: 12 }}
+          >
+            {jobs.map(job => (
+              <Grid item
+                key={`c-${job.title}`}
+                sm={4} md={4} lg={4}
+                sx={{ paddingRight: 2, paddingBottom: 2 }}
+              >
+                <ExperienceCard
+                  title={job.title}
+                  organisation={job.organisation}
+                  startYear={job.startYear}
+                  endYear={job.endYear}
+                  skills={job.skills}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Section>
         <Section title="Skills">
 
