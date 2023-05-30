@@ -13,18 +13,20 @@ interface ExperienceCardProps {
 
 export default function ExperienceCard({title, organisation, startYear, startMonth, endYear, endMonth, skills = []}: ExperienceCardProps) {
     return (
-        <Card variant="outlined">
-            <CardContent>
-                <Stack
-                    direction="column"
-                    spacing={1}
-                >
-                    <Typography variant="h6">{title}</Typography>
-                    <Typography variant="subtitle1">{organisation}</Typography>
-                    <Typography variant="subtitle2">
-                        {`${startMonth ?? ""} ${startYear} - ${endMonth ?? ""} ${endYear ?? "Present"}`}
-                    </Typography>
-                    <TagChipGroup items={skills} title="Skills" keyPrefix="sk" leadingIcon="design_services"/>
+        <Card style={{ height: '100%', width: '100%' }} variant="outlined">
+            <CardContent style={{ height: '100%' }}>
+                <Stack style={{ height: '100%' }} direction="column" justifyContent="space-between" spacing={2}>
+                    <Stack direction="column" spacing={1}>
+                        <Typography variant="subtitle1">{title}</Typography>
+                        <Typography variant="subtitle2">{organisation}</Typography>
+                        <Typography variant="body2">
+                            {`${startMonth ?? ""} ${startYear} - ${endMonth ?? ""} ${endYear ?? "Present"}`}
+                        </Typography>
+                    </Stack>
+                    <Stack direction="column" spacing={1}>
+                        
+                        <TagChipGroup items={skills} title="Skills" keyPrefix="sk" leadingIcon="design_services"/>
+                    </Stack>
                 </Stack>
             </CardContent>
         </Card>
