@@ -4,15 +4,15 @@ import Stack from '@mui/material/Stack'
 
 interface HeaderProps {
     name: string,
+    tagline: string,
     profileImgSrc: string
 }
 
-export default function Header({name, profileImgSrc}: HeaderProps) {
+export default function Header({name, tagline, profileImgSrc}: HeaderProps) {
     return (
         <header>
             <Stack
                 direction="row"
-                justifyContent="center"
                 alignItems="center"
                 spacing={4}
             >
@@ -21,7 +21,14 @@ export default function Header({name, profileImgSrc}: HeaderProps) {
                     src={profileImgSrc}
                     sx={{ width: 128, height: 128 }}
                 />
-                <Typography variant="h2">{name}</Typography>
+                <Stack
+                    direction="column"
+                    justifyItems="center"
+                    spacing={1}
+                >
+                    <Typography variant="h2">{name}</Typography>
+                    <Typography variant="h5">{tagline}</Typography>
+                </Stack>
             </Stack>
         </header>
     )

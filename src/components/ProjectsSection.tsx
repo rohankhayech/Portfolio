@@ -11,6 +11,7 @@ export default function ProjectsSection(props: {projects: Project[]}) {
     const [selPlats, setSelPlats] = useState<string | undefined>(undefined) 
     const [selFramework, setSelFramework] = useState<string | undefined>(undefined) 
     
+
     // Filtered projects.
     const fProjects = useMemo(
         () => filterProjects(props.projects, selLang, selFramework, selPlats),
@@ -30,14 +31,7 @@ export default function ProjectsSection(props: {projects: Project[]}) {
                         sm={4} md={4} lg={4}
                         sx={{ paddingRight: 2, paddingBottom: 2 }}
                     >
-                        <ProjectCard
-                            name={project.name}
-                            desc={project.desc}
-                            url={project.url}
-                            langs={project.langs}
-                            platforms={project.platforms}
-                            frameworks={project.frameworks}
-                        />
+                        <ProjectCard project={project} />
                     </Grid>
                 ))}
             </Grid>

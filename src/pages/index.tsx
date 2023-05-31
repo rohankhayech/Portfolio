@@ -2,10 +2,9 @@ import { Inter } from 'next/font/google'
 import Header from '@/components/Header'
 import Stack from '@mui/material/Stack'
 import Section from '@/components/Section'
-import ProjectCard from '@/components/ProjectCard'
 import Typography from '@mui/material/Typography'
 import ExperienceCard from '@/components/ExperienceCard'
-import { getGitHubProjects } from '@/data/projects'
+import { getGitHubProjects, getUserTagline } from '@/data/projects'
 import Project from '@/model/Project'
 import { Grid } from '@mui/material'
 import { getCourses, getJobs } from '@/data/experiences'
@@ -20,9 +19,11 @@ export async function getStaticProps() {
   const projects = await getGitHubProjects()
   const jobs = await getJobs()
   const courses = await getCourses()
+  const tagline = await getUserTagline()
 
   return {
     props: {
+      tagline,
       projects,
       jobs,
       courses
@@ -30,7 +31,7 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({projects, jobs, courses}: {projects: Project[], jobs: Experience[], courses: Experience[]}) {
+export default function Home({tagline, projects, jobs, courses}: {tagline: string, projects: Project[], jobs: Experience[], courses: Experience[]}) {
   return (
     <main>
       <Stack
@@ -40,7 +41,7 @@ export default function Home({projects, jobs, courses}: {projects: Project[], jo
         spacing={2}
         sx = {{margin: 4}}
       >
-        <Header name="Rohan Khayech" profileImgSrc="profile.jpg" />
+        <Header name="Rohan Khayech" tagline={tagline} profileImgSrc="https://avatars.githubusercontent.com/rohankhayech" />
         <Section title='About Me'>
           <Typography variant="body1">
             I am a passionate software engineering graduate from Curtin University, with an interest in Java/Kotlin, Android development and user interface design.
@@ -76,7 +77,7 @@ export default function Home({projects, jobs, courses}: {projects: Project[], jo
           >
             {jobs.map(job => (
               <Grid item
-                key={`c-${job.title}`}
+                key={`j-${job.title}`}
                 sm={4} md={4} lg={4}
                 sx={{ paddingRight: 2, paddingBottom: 2 }}
               >

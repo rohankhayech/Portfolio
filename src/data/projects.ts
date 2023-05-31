@@ -2,7 +2,7 @@
 
 import { Octokit } from 'octokit'
 import { RestEndpointMethodTypes, restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
-import Project from "@/model/Project";
+import Project, { ProjectType } from "@/model/Project";
 import startCase from "lodash.startcase"
 
 const RestOctokit = Octokit.plugin(restEndpointMethods)
@@ -24,20 +24,25 @@ export async function getGitHubProjects(): Promise<Project[]> {
     const repos = res.data
 
     // Collate list of projects.
-    return await Promise.all(repos
+    return (await Promise.all(repos
         ?.filter((repo: any) => repo.name != 'rohankhayech')
         .map(async (repo: any) => {
-            const {platforms, frameworks} = getRepoPlatformsAndFrameworks(repo.topics)
+            const {type, platforms, frameworks} = processRepoTopics(repo.topics)
             return {
-                name: (repo.name),
+                name: formatProjectName(repo.name),
                 desc: repo.description,
+                type: type,
                 url: repo.html_url,
                 langs: await getRepoLanguages(repo.name),
                 frameworks: frameworks,
                 platforms: platforms
             }
-        }
-    ))
+        })
+    )).sort((p1, p2) => { // Sort in app, lib, uni, other order.
+        if (p1.type === p2.type) { return 0 } 
+        else if (p1.type === 'app' || (p1.type === 'lib' && p2.type !== 'app')) { return -1 }
+        else return 1;
+    })
 }
 
 /**
@@ -74,16 +79,33 @@ async function getRepoLanguages(name: string): Promise<string[]> {
         .map(lang => capitalise(lang))
 }
 
+export async function getUserTagline(): Promise<string> {
+    const res = await gh.users.getAuthenticated()
+    return res.data.bio
+}
+
 /**
  * Collates a pair of lists of platforms and frameworks from the repository topics.
  * @param topics List of the repository's topics.
  * @returns A pair of lists of platforms and frameworks.
  */
-function getRepoPlatformsAndFrameworks(topics: string[]): {platforms: string[], frameworks: string[]} {
+function processRepoTopics(topics: string[]): {type: ProjectType, platforms: string[], frameworks: string[]} {
+    let type: ProjectType = "other"
     const platforms: string[] = []
     const frameworks: string[] = []
     topics.forEach(topic => {
         switch (topic) {
+            // Types
+            case 'app':
+            case 'application':
+                type = "app"
+                break;
+            case 'library':
+                type = "lib"
+                break;
+            case 'university':
+                type = "uni"
+                break;
             // Platforms
             case 'web': 
             case 'web-application':
@@ -140,7 +162,7 @@ function getRepoPlatformsAndFrameworks(topics: string[]): {platforms: string[], 
             default:
         }
     })
-    return {platforms, frameworks}
+    return {type, platforms, frameworks}
 }
 
 /**
