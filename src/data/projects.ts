@@ -40,7 +40,7 @@ export async function getGitHubProjects(): Promise<Project[]> {
         })
     )).sort((p1, p2) => { // Sort in app, lib, uni, other order.
         if (p1.type === p2.type) { return 0 } 
-        else if (p1.type === 'app' || (p1.type === 'lib' && p2.type !== 'app')) { return -1 }
+        else if (p1.type === 'Application' || (p1.type === 'Library' && p2.type !== 'Application')) { return -1 }
         else return 1;
     })
 }
@@ -81,7 +81,7 @@ async function getRepoLanguages(name: string): Promise<string[]> {
 
 export async function getUserTagline(): Promise<string> {
     const res = await gh.users.getAuthenticated()
-    return res.data.bio
+    return res.data.bio ?? ""
 }
 
 /**
@@ -90,7 +90,7 @@ export async function getUserTagline(): Promise<string> {
  * @returns A pair of lists of platforms and frameworks.
  */
 function processRepoTopics(topics: string[]): {type: ProjectType, platforms: string[], frameworks: string[]} {
-    let type: ProjectType = "other"
+    let type: ProjectType = "Project"
     const platforms: string[] = []
     const frameworks: string[] = []
     topics.forEach(topic => {
@@ -98,13 +98,13 @@ function processRepoTopics(topics: string[]): {type: ProjectType, platforms: str
             // Types
             case 'app':
             case 'application':
-                type = "app"
+                type = "Application"
                 break;
             case 'library':
-                type = "lib"
+                type = "Library"
                 break;
             case 'university':
-                type = "uni"
+                type = "University Project"
                 break;
             // Platforms
             case 'web': 

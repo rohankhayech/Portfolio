@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 Rohan Khayech */
+
 export default interface Project {
     name: string,
     desc: string,
@@ -8,4 +10,4 @@ export default interface Project {
     frameworks: string[]
 }
 
-export type ProjectType = "app" | "lib" | "uni" | "other"
+export type ProjectType = "Application" | "Library" | "University Project" | "Project"

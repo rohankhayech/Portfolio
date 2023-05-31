@@ -1,27 +1,66 @@
-import { Grid } from "@mui/material";
+/* Copyright (c) 2023 Rohan Khayech */
+
+import { Chip, Grid, Stack } from "@mui/material";
 import Section from "./Section";
-import Project from "@/model/Project";
+import Project, { ProjectType } from "@/model/Project";
 import ProjectCard from "./ProjectCard";
 import { useMemo, useState } from "react";
 
-export default function ProjectsSection(props: {projects: Project[]}) {
+/**
+ * UI section displaying the specified list of software projects 
+ * with options to filter by type, language, platform and framework.
+ * @param props.projects List of software projects to display.
+ * 
+ * @author Rohan Khayech
+ */
+export default function ProjectsSection(props: {projects: Project[]}) : JSX.Element {
     
     // Filter selection state.
+    const [selType, setSelType] = useState<ProjectType | undefined>(undefined) 
     const [selLang, setSelLang] = useState<string|undefined>(undefined) 
-    const [selPlats, setSelPlats] = useState<string | undefined>(undefined) 
+    const [selPlat, setSelPlat] = useState<string | undefined>(undefined) 
     const [selFramework, setSelFramework] = useState<string | undefined>(undefined) 
     
-
     // Filtered projects.
     const fProjects = useMemo(
-        () => filterProjects(props.projects, selLang, selFramework, selPlats),
-        [props.projects, selLang, selFramework, selPlats]
+        () => filterProjects(),
+        [props.projects, selType, selLang, selFramework, selPlat]
     )
 
+    /**
+     * Filters the project list with the current filters in state.
+     * @returns The filtered project list.
+     */
+    function filterProjects(): Project[] {
+        let fProjects = props.projects
+        if (selType !== undefined) {
+            fProjects = fProjects.filter(p => p.type === selType)
+        }
+        if (selLang !== undefined) {
+            fProjects = fProjects.filter(p => p.langs.includes(selLang))
+        }
+        if (selFramework !== undefined) {
+            fProjects = fProjects.filter(p => p.frameworks.includes(selFramework))
+        }
+        if (selPlat !== undefined) {
+            fProjects = fProjects.filter(p => p.platforms.includes(selPlat))
+        }
+        return fProjects
+    }
 
     // Component
     return (
         <Section title='Software Portfolio'>
+            <FilterBar 
+                selType={selType}
+                selLang={selLang}
+                selPlat={selPlat}
+                selFramework={selFramework}
+                onClearType={() => setSelType(undefined)}
+                onClearLang={()=>setSelLang(undefined)}
+                onClearPlat={() => setSelPlat(undefined)}
+                onClearFramework={() => setSelFramework(undefined)}
+            />
             <Grid container
                 columns={{ sm: 4, md: 8, lg: 12 }}
             >
@@ -31,7 +70,13 @@ export default function ProjectsSection(props: {projects: Project[]}) {
                         sm={4} md={4} lg={4}
                         sx={{ paddingRight: 2, paddingBottom: 2 }}
                     >
-                        <ProjectCard project={project} />
+                        <ProjectCard 
+                            project={project}
+                            onTypeClick={()=>setSelType(project.type)}
+                            onLangClick={setSelLang}
+                            onPlatClick={setSelPlat}
+                            onFrameworkClick={setSelFramework}
+                        />
                     </Grid>
                 ))}
             </Grid>
@@ -39,16 +84,46 @@ export default function ProjectsSection(props: {projects: Project[]}) {
     )
 }
 
-function filterProjects(projects: Project[], selLang?: string, selFramework?: string, selPlats?: string): Project[] {
-    let fProjects = projects
-    if (selLang !== undefined) {
-        fProjects = fProjects.filter(p => p.langs.includes(selLang))
-    }
-    if (selFramework !== undefined) {
-        fProjects = fProjects.filter(p => p.frameworks.includes(selFramework))
-    }
-    if (selPlats !== undefined) {
-        fProjects = fProjects.filter(p => p.platforms.includes(selPlats))
-    }
-    return fProjects
+/**
+ * UI bar displaying the currently selected filters and buttons to clear them.
+ * @param props.selType The currently selected project type filter.
+ * @param props.selLang The currently selected language filter.
+ * @param props.selPlat The currently selected platform filter.
+ * @param props.selFramework The currently selected framework filter.
+ * @param onClearType Called when the user clears the type filter.
+ * @param onClearLang Called when the user clears the language filter.
+ * @param onClearPlat Called when the user clears the platform filter.
+ * @param onClearFramework Called when the user clears the framework filter.
+ */
+function FilterBar(props: {
+    selType: string | undefined,
+    selLang: string | undefined,
+    selPlat: string | undefined,
+    selFramework: string | undefined,
+    onClearType: () => void,
+    onClearLang: () => void,
+    onClearPlat: () => void,
+    onClearFramework: () => void
+}): JSX.Element {
+    return (
+        <Stack direction="row" spacing={1} >
+            {props.selType && <Chip label={`Type: ${props.selType}`} onDelete={props.onClearType} />}
+            {props.selLang && <Chip label={`Language: ${props.selLang}`} onDelete={props.onClearLang}/>}
+            {props.selPlat && <Chip label={`Platform: ${props.selPlat}`} onDelete={props.onClearPlat} />}
+            {props.selFramework && <Chip label={`Built with: ${props.selFramework}`} onDelete={props.onClearFramework} />}
+            {(props.selLang || props.selPlat || props.selFramework) &&
+                <Chip 
+                    label="Clear" 
+                    clickable 
+                    variant="outlined" 
+                    onClick={() => {
+                        props.onClearType()
+                        props.onClearLang()
+                        props.onClearPlat()
+                        props.onClearFramework()
+                    }}
+                />
+            }
+        </Stack>
+    )
 }

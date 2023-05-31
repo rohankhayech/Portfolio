@@ -1,3 +1,4 @@
+/* Copyright (c) 2023 Rohan Khayech */
 import { Card, CardContent, Stack, Typography } from "@mui/material"
 import TagChipGroup from "./TagChipGroup"
 
@@ -11,7 +12,7 @@ interface ExperienceCardProps {
     skills?: string[]
 }
 
-export default function ExperienceCard({title, organisation, startYear, startMonth, endYear, endMonth, skills = []}: ExperienceCardProps) {
+export default function ExperienceCard({title, organisation, startYear, startMonth, endYear, endMonth, skills = []}: ExperienceCardProps): JSX.Element {
     return (
         <Card style={{ height: '100%', width: '100%' }} variant="outlined">
             <CardContent style={{ height: '100%' }}>
@@ -25,7 +26,7 @@ export default function ExperienceCard({title, organisation, startYear, startMon
                     </Stack>
                     <Stack direction="column" spacing={1}>
                         
-                        <TagChipGroup items={skills} title="Skills" keyPrefix="sk" leadingIcon="design_services" onClick={()=>{}}/>
+                        <TagChipGroup items={skills} title="Skills" keyPrefix="sk" leadingIcon="design_services"/>
                     </Stack>
                 </Stack>
             </CardContent>
