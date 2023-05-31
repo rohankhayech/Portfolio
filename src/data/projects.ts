@@ -52,6 +52,8 @@ export async function getGitHubProjects(): Promise<Project[]> {
  */
 function formatProjectName(name: string): string {
     switch (name) {
+        case "Website":
+            return "About this Website"
         case "ATel-Lookup":
             return "ATel Lookup"
         case "MNK-TicTacToe":

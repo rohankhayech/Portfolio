@@ -31,12 +31,19 @@ export default function ProjectCard(props: {
 }): JSX.Element {
 
     // Project type icon
+    let type: string = props.project.type
     let icon: string
     switch (props.project.type) {
         case "Application": icon = "web_asset"; break;
         case "Library": icon = "collections_bookmark"; break;
         case "University Project": icon = "history_edu"; break;
         case "Project": icon = "book";
+    }
+
+    // Special case for this website's project
+    if (props.project.name === "About this Website") {
+        type = "About"
+        icon = "info"
     }
 
     // Component
@@ -46,8 +53,8 @@ export default function ProjectCard(props: {
                 <Stack style={{ height: '100%' }} direction="column" justifyContent="space-between" spacing={2}>
                     <Stack direction="column" spacing={1}>
                         <Stack direction="row" spacing={1} alignItems="center">
-                            <Tooltip title={props.project.type} placement="top">
-                                <IconButton sx={{padding: 0}} onClick={props.onTypeClick}>
+                            <Tooltip title={type} placement="top">
+                                <IconButton disabled={type === "About"} sx={{padding: 0}} onClick={props.onTypeClick}>
                                     <Icon baseClassName="material-icons-outlined" fontSize="small">{icon}</Icon>
                                 </IconButton>
                             </Tooltip>
