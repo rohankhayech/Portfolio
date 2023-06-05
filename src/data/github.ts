@@ -4,8 +4,8 @@ import { Octokit } from 'octokit'
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import Project, { ProjectType } from "@/model/Project";
 import startCase from "lodash.startcase"
+import { loadJSONObject } from './fileio';
 import path from 'path';
-import fsPromises from 'fs/promises'
 
 const RestOctokit = Octokit.plugin(restEndpointMethods)
 const octokit = new RestOctokit({
@@ -17,7 +17,7 @@ const gh = restEndpointMethods(octokit).rest
  * Collates a list of projects based on the owner's GitHub repositories.
  * @returns A list of projects based on the owner's GitHub repositories.
  */
-export async function getGitHubProjects(): Promise<Project[]> {
+export async function getGitHubProjects(): Promise<Map<string, Project>> {
     // Retrieve list of repos from GitHub REST API.
     const res = await gh.repos.listForUser({
         username: "rohankhayech",
@@ -26,44 +26,38 @@ export async function getGitHubProjects(): Promise<Project[]> {
     const repos = res.data
 
     // Load projects and frameworks
-    const {allPlatforms, allFrameworks} = await loadCategories()
+    const {allPlatforms, allFrameworks, allTechSkills} = await loadCategories()
 
     // Collate list of projects.
-    return (await Promise.all(repos
+    const projects: Project[] = await Promise.all(repos
         ?.filter((repo: any) => repo.name != 'rohankhayech')
         .map(async (repo: any) => {
-            const {type, platforms, frameworks} = processRepoTopics(repo.topics, allPlatforms, allFrameworks)
+            const {type, platforms, frameworks, techSkills} = processRepoTopics(repo.topics, allPlatforms, allFrameworks, allTechSkills)
             return {
                 name: formatProjectName(repo.name),
+                repoName: repo.name,
                 desc: repo.description,
                 type: type,
                 url: repo.html_url,
                 langs: await getRepoLanguages(repo.name),
                 frameworks: frameworks,
-                platforms: platforms
+                platforms: platforms,
+                personalSkills: [],
+                techSkills: techSkills
             }
         })
-    )).sort((p1, p2) => p1.type - p2.type) // Sort by type
+    )
+
+    return new Map(projects.map(p => [p.repoName!, p]))
 }
 
 /**
- * Formats the project name to title case, with support for custom exceptions.
+ * Formats the project name to title case.
  * @param name The repository name.
  * @returns The formatted project name in title case.
  */
 function formatProjectName(name: string): string {
-    switch (name) {
-        case "Website":
-            return "About this Website"
-        case "ATel-Lookup":
-            return "ATel Lookup"
-        case "MNK-TicTacToe":
-            return "MNK Tic-Tac-Toe"
-        case "LiftSim":
-            return "Lift Simulator"
-        default:
-            return startCase(name)
-    }
+    return startCase(name)
 }
 
 /**
@@ -97,15 +91,18 @@ export async function getUserTagline(): Promise<string> {
 function processRepoTopics(
     topics: string[], 
     allPlatforms: Map<string, string>,
-    allFrameworks: Map<string, string>
+    allFrameworks: Map<string, string>,
+    allTechSkills: Map<string, string>
 ): {
     type: ProjectType, 
     platforms: string[], 
-    frameworks: string[]
+    frameworks: string[],
+    techSkills: string[]
 } {
     let type: ProjectType = ProjectType.OTHER
     const platforms: string[] = []
     const frameworks: string[] = []
+    const techSkills: string[] = []
     topics.forEach(topic => {
         // Check types.
         switch (topic) {
@@ -132,9 +129,13 @@ function processRepoTopics(
         if (allFrameworks.has(topic)) {
             frameworks.push(allFrameworks.get(topic)!)
         }
+
+        if (allTechSkills.has(topic)) {
+            techSkills.push(allTechSkills.get(topic)!)
+        }
     })
 
-    return {type, platforms, frameworks}
+    return {type, platforms, frameworks, techSkills}
 }
 
 /**
@@ -143,26 +144,18 @@ function processRepoTopics(
  */
 async function loadCategories(): Promise<{
     allPlatforms: Map<string, string>, 
-    allFrameworks: Map<string, string>
+    allFrameworks: Map<string, string>,
+    allTechSkills: Map<string, string>
 }> {
-    const platforms = loadJSONObject("platforms.json")
-    const frameworks = loadJSONObject("frameworks.json")
+    const platforms = loadJSONObject(path.join("categories","platforms.json"))
+    const frameworks = loadJSONObject(path.join("categories", "frameworks.json"))
+    const techSkills = loadJSONObject(path.join("categories", "tech_skills.json"))
 
     return {
         allPlatforms: new Map(Object.entries(await platforms)),
-        allFrameworks: new Map(Object.entries(await frameworks))
+        allFrameworks: new Map(Object.entries(await frameworks)),
+        allTechSkills: new Map(Object.entries(await techSkills))
     }
-}
-
-/**
- * Loads the JSON object from the specified file in the "json" directory.
- * @param filename The name of the file.
- * @returns The parsed JSON object.
- */
-async function loadJSONObject(filename: string): Promise<any> {
-    const filePath = path.join(process.cwd(), "json", filename)
-    const jsonData = await fsPromises.readFile(filePath, "utf-8")
-    return JSON.parse(jsonData)
 }
 
 /**
