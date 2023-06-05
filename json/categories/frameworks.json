@@ -8,5 +8,7 @@
     "reactjs": "React",
     "nextjs": "Next.js",
     "mui": "MUI",
-    "javafx": "JavaFX"
+    "javafx": "JavaFX",
+    "github-actions": "GitHub Actions",
+    "github-pages": "GitHub Pages"
 }
