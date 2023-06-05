@@ -4,7 +4,7 @@
         "organisation": "Curtin University",
         "startYear": "2022",
         "endYear" :"2022",
-        "skills": [
+        "personalSkills": [
             "Teamwork",
             "Communication"
         ]
@@ -14,10 +14,37 @@
         "organisation": "Curtin University",
         "startYear": "2019",
         "endYear": "2021",
-        "skills": [
+        "personalSkills": [
+            "Teamwork",
+            "Communication",
+            "Independence",
+            "Collaborative Problem Solving",
+            "Attention to Detail"
+        ],
+        "languages": [
             "Java",
+            "Python",
+            "C",
+            "C++",
+            "SQL"
+        ],
+        "techSkills": [
             "Git",
-            "Algorithms"
+            "Algorithms",
+            "Data Structures",
+            "Programming",
+            "Application Development",
+            "Cybersecurity"
+        ],
+        "frameworks": [
+            "Flask",
+            "Angular",
+            "JavaFX"
+        ],
+        "platforms": [
+            "Windows",
+            "Linux",
+            "Android"
         ]
     },
     {
@@ -25,10 +52,14 @@
         "organisation": "Shenton College",
         "startYear": "2014",
         "endYear": "2018",
-        "skills": [
+        "languages": [
+            "Python",
+            "SQL",
+            "Pascal"
+        ],
+        "techSkills": [
             "Algorithms",
-            "Data Structures",
-            "Python"
+            "Data Structures"
         ]
     }
 ]

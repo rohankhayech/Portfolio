@@ -57,13 +57,7 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
                 xs={12} md={6} xl={4}
                 sx={{ paddingRight: 2, paddingBottom: 2 }}
               >
-                <ExperienceCard
-                  title={course.title}
-                  organisation={course.organisation}
-                  startYear={course.startYear}
-                  endYear={course.endYear}
-                  skills={course.skills}
-                />
+                <ExperienceCard experience={course}/>
               </Grid>
             ))}
           </Grid>
@@ -76,13 +70,7 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
                 xs={12} md={6} xl={4}
                 sx={{ paddingRight: 2, paddingBottom: 2 }}
               >
-                <ExperienceCard
-                  title={job.title}
-                  organisation={job.organisation}
-                  startYear={job.startYear}
-                  endYear={job.endYear}
-                  skills={job.skills}
-                />
+                <ExperienceCard experience={job}/>
               </Grid>
             ))}
           </Grid>

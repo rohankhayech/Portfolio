@@ -4,9 +4,11 @@
         "organisation": "Indian Ocean Hotel",
         "startYear": "2021",
         "startMonth": "Dec",
-        "skills": [
+        "personalSkills": [
             "Teamwork",
-            "Communication"
+            "Communication",
+            "Independence",
+            "Attention to Detail"
         ]
     },
     {
@@ -16,9 +18,14 @@
         "startMonth": "Jan",
         "endYear": "2021",
         "endMonth": "Dec",
-        "skills": [
+        "personalSkills": [
             "Teamwork",
             "Communication",
+            "Independence",
+            "Attention to Detail",
+            "Collaborative Problem Solving"
+        ],
+        "techSkills": [
             "Microsoft Excel"
         ]
     }

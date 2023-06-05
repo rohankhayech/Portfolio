@@ -5,5 +5,9 @@ export default interface Experience {
     startMonth?: string
     endYear?: string
     endMonth?: string
-    skills?: string[]
+    personalSkills?: string[]
+    techSkills?: string[]
+    languages?: string[]
+    frameworks?: string[]
+    platforms?: string[]
 }

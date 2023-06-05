@@ -1,32 +1,36 @@
 /* Copyright (c) 2023 Rohan Khayech */
 import { Card, CardContent, Stack, Typography } from "@mui/material"
 import TagChipGroup from "./TagChipGroup"
+import Experience from "@/model/Experience"
 
-interface ExperienceCardProps {
-    title: string,
-    organisation: string,
-    startYear: string,
-    startMonth?: string
-    endYear?: string
-    endMonth?: string
-    skills?: string[]
-}
-
-export default function ExperienceCard({title, organisation, startYear, startMonth, endYear, endMonth, skills = []}: ExperienceCardProps): JSX.Element {
+export default function ExperienceCard(props: {experience: Experience}): JSX.Element {
     return (
         <Card style={{ height: '100%', width: '100%' }} variant="outlined">
             <CardContent style={{ height: '100%' }}>
                 <Stack style={{ height: '100%' }} direction="column" justifyContent="space-between" spacing={2}>
                     <Stack direction="column" spacing={1}>
-                        <Typography variant="subtitle1">{title}</Typography>
-                        <Typography variant="subtitle2">{organisation}</Typography>
+                        <Typography variant="subtitle1">{props.experience.title}</Typography>
+                        <Typography variant="subtitle2">{props.experience.organisation}</Typography>
                         <Typography variant="body2">
-                            {`${startMonth ?? ""} ${startYear} - ${endMonth ?? ""} ${endYear ?? "Present"}`}
+                            {`${props.experience.startMonth ?? ""} ${props.experience.startYear} - ${props.experience.endMonth ?? ""} ${props.experience.endYear ?? "Present"}`}
                         </Typography>
                     </Stack>
                     <Stack direction="column" spacing={1}>
-                        
-                        <TagChipGroup items={skills} title="Skills" keyPrefix="sk" leadingIcon="design_services"/>
+                        {props.experience.personalSkills &&
+                            <TagChipGroup items={props.experience.personalSkills} title="Interpersonal Skills" keyPrefix="sk" leadingIcon="group" maxItems={3} />
+                        }
+                        {props.experience.techSkills &&
+                            <TagChipGroup items={props.experience.techSkills} title="Technical Skills" keyPrefix="sk" leadingIcon="design_services" maxItems={3} />
+                        }
+                        {props.experience.languages &&
+                            <TagChipGroup items={props.experience.languages} title="Language Experience" keyPrefix="sk" leadingIcon="data_object" />
+                        }
+                        {props.experience.frameworks &&
+                            <TagChipGroup items={props.experience.frameworks} title="Framework/Library Experience" keyPrefix="sk" leadingIcon="dynamic_form" />
+                        }
+                        {props.experience.platforms &&
+                            <TagChipGroup items={props.experience.platforms} title="Platform Development Experience" keyPrefix="sk" leadingIcon="devices" />
+                        }
                     </Stack>
                 </Stack>
             </CardContent>
