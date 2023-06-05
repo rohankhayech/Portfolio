@@ -1,21 +1,22 @@
-import { Inter } from 'next/font/google'
+/** Copyright (c) 2023 Rohan Khayech */
+
+import { 
+  Stack, 
+  Typography, 
+  Grid 
+} from '@mui/material'
 import Header from '@/components/Header'
-import Stack from '@mui/material/Stack'
 import Section from '@/components/Section'
-import Typography from '@mui/material/Typography'
 import ExperienceCard from '@/components/ExperienceCard'
-import { getGitHubProjects, getUserTagline } from '@/data/projects'
+import { getUserTagline } from '@/data/github'
+import { getAllProjects } from '@/data/projects'
 import Project from '@/model/Project'
-import { Grid } from '@mui/material'
 import { getCourses, getJobs } from '@/data/experiences'
 import Experience from '@/model/Experience'
 import ProjectsSection from '@/components/ProjectsSection'
 
-const inter = Inter({ subsets: ['latin'] })
-
 export async function getStaticProps() {
-
-  const projects = await getGitHubProjects()
+  const projects = await getAllProjects()
   const jobs = await getJobs()
   const courses = await getCourses()
   const tagline = await getUserTagline()

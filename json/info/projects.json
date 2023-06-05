@@ -1,0 +1,10 @@
+[
+    { "name": "About this Website", "repoName": "Website" },
+    { 
+        "name": "ATel Lookup", 
+        "repoName": "ATel-Lookup", 
+        "langs": "SQL"
+    },
+    { "name": "Lift Simulator", "repoName": "LiftSim" },
+    { "name": "MNK Tic-Tac-Toe", "repoName": "MNK-TicTacToe" }
+]

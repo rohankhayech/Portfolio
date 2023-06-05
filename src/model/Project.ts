@@ -2,12 +2,28 @@
 
 export default interface Project {
     name: string,
+    repoName?: string,
     desc: string,
     type: ProjectType
-    url: string,
+    url?: string,
     platforms: string[],
     langs: string[],
-    frameworks: string[]
+    frameworks: string[],
+    techSkills: string[],
+    personalSkills: string[]
+}
+
+export interface LocalProject {
+    name: string,
+    repoName?: string,
+    desc?: string,
+    type?: ProjectType
+    url?: string,
+    platforms?: string[],
+    langs?: string[],
+    frameworks?: string[],
+    techSkills?: string[],
+    personalSkills?: string[]
 }
 
 export enum ProjectType {
