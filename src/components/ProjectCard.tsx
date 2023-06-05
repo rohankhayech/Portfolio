@@ -10,7 +10,7 @@ import {
     Typography 
 } from "@mui/material";
 import TagChipGroup from "./TagChipGroup";
-import Project from "@/model/Project";
+import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
 
 /**
  * UI component that displays a software project, featuring clickable categories.
@@ -31,13 +31,13 @@ export default function ProjectCard(props: {
 }): JSX.Element {
 
     // Project type icon
-    let type: string = props.project.type
+    let type: string = getProjectTypeName(props.project.type)
     let icon: string
     switch (props.project.type) {
-        case "Application": icon = "web_asset"; break;
-        case "Library": icon = "collections_bookmark"; break;
-        case "University Project": icon = "history_edu"; break;
-        case "Project": icon = "book";
+        case ProjectType.APP: icon = "web_asset"; break;
+        case ProjectType.LIB: icon = "collections_bookmark"; break;
+        case ProjectType.UNI: icon = "history_edu"; break;
+        case ProjectType.OTHER: icon = "book";
     }
 
     // Special case for this website's project

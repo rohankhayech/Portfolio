@@ -10,4 +10,18 @@ export default interface Project {
     frameworks: string[]
 }
 
-export type ProjectType = "Application" | "Library" | "University Project" | "Project"
+export enum ProjectType {
+    APP,
+    LIB,
+    UNI,
+    OTHER,
+}
+
+export function getProjectTypeName(type: ProjectType): string {
+    switch(type) {
+        case ProjectType.APP: return "Application";
+        case ProjectType.LIB: return "Library"
+        case ProjectType.UNI: return "University Project"
+        case ProjectType.OTHER: default: return "Project"
+    }
+}

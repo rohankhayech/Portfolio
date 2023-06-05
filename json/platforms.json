@@ -1,0 +1,11 @@
+{
+    "web": "Web",
+    "web-application": "Web",
+    "android": "Android",
+    "ios": "iOS",
+    "desktop": "Desktop",
+    "windows": "Windows",
+    "macos": "Mac",
+    "mac": "Mac",
+    "linux": "Linux"
+}

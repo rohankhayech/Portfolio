@@ -2,7 +2,7 @@
 
 import { Chip, Grid, Stack } from "@mui/material";
 import Section from "./Section";
-import Project, { ProjectType } from "@/model/Project";
+import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
 import ProjectCard from "./ProjectCard";
 import { useMemo, useState } from "react";
 
@@ -96,7 +96,7 @@ export default function ProjectsSection(props: {projects: Project[]}) : JSX.Elem
  * @param onClearFramework Called when the user clears the framework filter.
  */
 function FilterBar(props: {
-    selType: string | undefined,
+    selType: ProjectType | undefined,
     selLang: string | undefined,
     selPlat: string | undefined,
     selFramework: string | undefined,
@@ -105,9 +105,14 @@ function FilterBar(props: {
     onClearPlat: () => void,
     onClearFramework: () => void
 }): JSX.Element {
+    let typeName = ""
+    if (props.selType !== undefined) {
+        typeName = getProjectTypeName(props.selType)
+    }
+
     return (
         <Stack direction="row" spacing={1} >
-            {props.selType && <Chip label={`Type: ${props.selType}`} onDelete={props.onClearType} />}
+            {props.selType !== undefined && <Chip label={`Type: ${typeName}`} onDelete={props.onClearType} />}
             {props.selLang && <Chip label={`Language: ${props.selLang}`} onDelete={props.onClearLang}/>}
             {props.selPlat && <Chip label={`Platform: ${props.selPlat}`} onDelete={props.onClearPlat} />}
             {props.selFramework && <Chip label={`Built with: ${props.selFramework}`} onDelete={props.onClearFramework} />}

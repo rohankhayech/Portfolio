@@ -1,0 +1,12 @@
+{
+    "flask": "Flask",
+    "mysql": "MySQL",
+    "angular": "Angular",
+    "docker": "Docker",
+    "jetpack-compose": "Jetpack Compose",
+    "react": "React",
+    "reactjs": "React",
+    "nextjs": "Next.js",
+    "mui": "MUI",
+    "javafx": "JavaFX"
+}

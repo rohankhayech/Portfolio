@@ -1,9 +1,11 @@
 /* Copyright (c) 2023 Rohan Khayech */
 
 import { Octokit } from 'octokit'
-import { RestEndpointMethodTypes, restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
+import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import Project, { ProjectType } from "@/model/Project";
 import startCase from "lodash.startcase"
+import path from 'path';
+import fsPromises from 'fs/promises'
 
 const RestOctokit = Octokit.plugin(restEndpointMethods)
 const octokit = new RestOctokit({
@@ -23,11 +25,14 @@ export async function getGitHubProjects(): Promise<Project[]> {
     })
     const repos = res.data
 
+    // Load projects and frameworks
+    const {allPlatforms, allFrameworks} = await loadCategories()
+
     // Collate list of projects.
     return (await Promise.all(repos
         ?.filter((repo: any) => repo.name != 'rohankhayech')
         .map(async (repo: any) => {
-            const {type, platforms, frameworks} = processRepoTopics(repo.topics)
+            const {type, platforms, frameworks} = processRepoTopics(repo.topics, allPlatforms, allFrameworks)
             return {
                 name: formatProjectName(repo.name),
                 desc: repo.description,
@@ -38,11 +43,7 @@ export async function getGitHubProjects(): Promise<Project[]> {
                 platforms: platforms
             }
         })
-    )).sort((p1, p2) => { // Sort in app, lib, uni, other order.
-        if (p1.type === p2.type) { return 0 } 
-        else if (p1.type === 'Application' || (p1.type === 'Library' && p2.type !== 'Application')) { return -1 }
-        else return 1;
-    })
+    )).sort((p1, p2) => p1.type - p2.type) // Sort by type
 }
 
 /**
@@ -89,82 +90,79 @@ export async function getUserTagline(): Promise<string> {
 /**
  * Collates a pair of lists of platforms and frameworks from the repository topics.
  * @param topics List of the repository's topics.
+ * @param allPlatforms Map of all recognised platforms and their display names.
+ * @param allFrameworks Map of all recognised frameworks and their display names.
  * @returns A pair of lists of platforms and frameworks.
  */
-function processRepoTopics(topics: string[]): {type: ProjectType, platforms: string[], frameworks: string[]} {
-    let type: ProjectType = "Project"
+function processRepoTopics(
+    topics: string[], 
+    allPlatforms: Map<string, string>,
+    allFrameworks: Map<string, string>
+): {
+    type: ProjectType, 
+    platforms: string[], 
+    frameworks: string[]
+} {
+    let type: ProjectType = ProjectType.OTHER
     const platforms: string[] = []
     const frameworks: string[] = []
     topics.forEach(topic => {
+        // Check types.
         switch (topic) {
             // Types
             case 'app':
             case 'application':
-                type = "Application"
+                type = ProjectType.APP
                 break;
             case 'library':
-                type = "Library"
+                type = ProjectType.LIB
                 break;
             case 'university':
-                type = "University Project"
-                break;
-            // Platforms
-            case 'web': 
-            case 'web-application':
-                platforms.push("Web")
-                break;
-            case 'android':
-                platforms.push("Android")
-                break;
-            case 'ios':
-                platforms.push("iOS")
-                break;
-            case 'desktop':
-                platforms.push("Desktop")
-                break;
-            case 'windows':
-                platforms.push("windows")
-                break;
-            case 'macos':
-            case 'mac':
-                platforms.push("macos")
-                break;
-            case 'linux':
-                platforms.push("Linux")
-                break;
-            // Frameworks
-            case 'flask':
-                frameworks.push("Flask")
-                break;
-            case 'mysql':
-                frameworks.push("MySQL")
-                break;
-            case 'angular':
-                frameworks.push("Angular")
-                break;
-            case 'docker':
-                frameworks.push("Docker")
-                break;
-            case 'jetpack-compose':
-                frameworks.push("Jetpack Compose")
-                break;
-            case 'react':
-            case 'reactjs':
-                frameworks.push("React")
-                break;
-            case 'nextjs':
-                frameworks.push("Next.js")
-                break;
-            case 'mui':
-                frameworks.push("MUI")
-                break;
-            case 'javafx':
-                frameworks.push("JavaFX")
+                type = ProjectType.UNI
                 break;
             default:
         }
+
+        // Check platforms
+        if (allPlatforms.has(topic)) {
+            platforms.push(allPlatforms.get(topic)!)
+        }
+
+        // Check frameworks
+        if (allFrameworks.has(topic)) {
+            frameworks.push(allFrameworks.get(topic)!)
+        }
     })
+
     return {type, platforms, frameworks}
+}
+
+/**
+ * Loads the platforms and frameworks and their display names from file.
+ * @returns Maps of the recognised platforms and frameworks abd their display names.
+ */
+async function loadCategories(): Promise<{
+    allPlatforms: Map<string, string>, 
+    allFrameworks: Map<string, string>
+}> {
+    const platforms = loadJSONObject("platforms.json")
+    const frameworks = loadJSONObject("frameworks.json")
+
+    return {
+        allPlatforms: new Map(Object.entries(await platforms)),
+        allFrameworks: new Map(Object.entries(await frameworks))
+    }
+}
+
+/**
+ * Loads the JSON object from the specified file in the "json" directory.
+ * @param filename The name of the file.
+ * @returns The parsed JSON object.
+ */
+async function loadJSONObject(filename: string): Promise<any> {
+    const filePath = path.join(process.cwd(), "json", filename)
+    const jsonData = await fsPromises.readFile(filePath, "utf-8")
+    return JSON.parse(jsonData)
 }
 
 /**
