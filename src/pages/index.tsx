@@ -9,7 +9,6 @@ import Project from '@/model/Project'
 import { Grid } from '@mui/material'
 import { getCourses, getJobs } from '@/data/experiences'
 import Experience from '@/model/Experience'
-import { useState } from 'react'
 import ProjectsSection from '@/components/ProjectsSection'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -51,13 +50,11 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
         </Section>
         <ProjectsSection projects={projects}/>
         <Section title="Education">
-          <Grid container
-            columns={{ sm: 4, md: 8, lg: 12 }}
-          >
+          <Grid container>
             {courses.map(course => (
               <Grid item
                 key={`c-${course.title}`}
-                sm={4} md={4} lg={4}
+                xs={12} md={6} xl={4}
                 sx={{ paddingRight: 2, paddingBottom: 2 }}
               >
                 <ExperienceCard
@@ -72,13 +69,11 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
           </Grid>
         </Section>
         <Section title="Work Experience">
-          <Grid container
-            columns={{ sm: 4, md: 8, lg: 12 }}
-          >
+          <Grid container>
             {jobs.map(job => (
               <Grid item
                 key={`j-${job.title}`}
-                sm={4} md={4} lg={4}
+                xs={12} md={6} xl={4}
                 sx={{ paddingRight: 2, paddingBottom: 2 }}
               >
                 <ExperienceCard

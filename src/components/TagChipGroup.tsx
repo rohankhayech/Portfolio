@@ -26,6 +26,8 @@ export default function TagChipGroup(props: {
                 direction="row"
                 alignItems="center"
                 spacing={1}
+                useFlexGap
+                flexWrap="wrap"
             >
                 <Tooltip title={props.title} placement="right">
                     <Icon fontSize="small">{props.leadingIcon}</Icon>

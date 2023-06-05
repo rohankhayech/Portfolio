@@ -61,13 +61,11 @@ export default function ProjectsSection(props: {projects: Project[]}) : JSX.Elem
                 onClearPlat={() => setSelPlat(undefined)}
                 onClearFramework={() => setSelFramework(undefined)}
             />
-            <Grid container
-                columns={{ sm: 4, md: 8, lg: 12 }}
-            >
+            <Grid container>
                 {fProjects.map(project => (
                     <Grid item
                         key={'p-${project.name}'}
-                        sm={4} md={4} lg={4}
+                        xs={12} md={6} xl={4}
                         sx={{ paddingRight: 2, paddingBottom: 2 }}
                     >
                         <ProjectCard 
