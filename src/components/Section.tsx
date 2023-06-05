@@ -9,7 +9,7 @@ interface SectionProps {
 
 export default function Section({title, children} : PropsWithChildren<SectionProps>) {
     return (
-        <section style={{width: "100%"}}>
+        <section id={title.toLowerCase().replace(" ", "-")} style={{width: "100%"}}>
             <Stack
                 direction="column"
                 justifyContent="flex-start"
