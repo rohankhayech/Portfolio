@@ -1,0 +1,25 @@
+[
+    {
+        "title": "Bar Staff",
+        "organisation": "Indian Ocean Hotel",
+        "startYear": "2021",
+        "startMonth": "Dec",
+        "skills": [
+            "Teamwork",
+            "Communication"
+        ]
+    },
+    {
+        "title": "Administrative Assistant",
+        "organisation": "MPA Skills",
+        "startYear": "2019",
+        "startMonth": "Jan",
+        "endYear": "2021",
+        "endMonth": "Dec",
+        "skills": [
+            "Teamwork",
+            "Communication",
+            "Microsoft Excel"
+        ]
+    }
+]

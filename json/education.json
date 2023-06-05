@@ -1,0 +1,34 @@
+[
+    {
+        "title": "Graduate Diploma in Professional Engineering (Electrical Engineering)",
+        "organisation": "Curtin University",
+        "startYear": "2022",
+        "endYear" :"2022",
+        "skills": [
+            "Teamwork",
+            "Communication"
+        ]
+    },
+    {
+        "title": "Bachelor of Science (Computing) with Distinction",
+        "organisation": "Curtin University",
+        "startYear": "2019",
+        "endYear": "2021",
+        "skills": [
+            "Java",
+            "Git",
+            "Algorithms"
+        ]
+    },
+    {
+        "title": "WACE",
+        "organisation": "Shenton College",
+        "startYear": "2014",
+        "endYear": "2018",
+        "skills": [
+            "Algorithms",
+            "Data Structures",
+            "Python"
+        ]
+    }
+]
