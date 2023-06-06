@@ -3,7 +3,10 @@
 import { 
   Stack, 
   Typography, 
-  Grid 
+  Grid, 
+  Alert,
+  Link,
+  AlertTitle
 } from '@mui/material'
 import Header from '@/components/Header'
 import Section from '@/components/Section'
@@ -38,9 +41,15 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
         direction="column"
         justifyContent="center"
         alignItems="flex-start"
-        spacing={2}
+        spacing={3}
         sx = {{margin: 4}}
       >
+        <Alert severity="warning" sx={{width: "100%"}}>
+          <AlertTitle>Work in Progress</AlertTitle>
+          I'm currently building this website to learn <em>React</em>, <em>Next.js</em> and web development best practices. 
+          <br/>
+          <strong> Please see my <Link href="https://github.com/rohankhayech">GitHub</Link> and <Link href="https://www.linkedin.com/in/rohan-khayech-356b01228/">LinkedIn</Link> profiles for my up-to-date portfolio and contact information.</strong>
+        </Alert>
         <Header name="Rohan Khayech" tagline={tagline} profileImgSrc="https://avatars.githubusercontent.com/rohankhayech" />
         <Section title='About Me'>
           <Typography variant="body1">
