@@ -9,7 +9,7 @@ import path from 'path';
 
 const RestOctokit = Octokit.plugin(restEndpointMethods)
 const octokit = new RestOctokit({
-    auth: process.env.GITHUB_TOKEN
+    auth: process.env.API_TOKEN_GITHUB
 })
 const gh = restEndpointMethods(octokit).rest
 
