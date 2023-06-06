@@ -17,7 +17,10 @@ const gh = restEndpointMethods(octokit).rest
  * Collates a list of projects based on the owner's GitHub repositories.
  * @returns A list of projects based on the owner's GitHub repositories.
  */
-export async function getGitHubProjects(): Promise<Map<string, Project>> {
+export async function getGitHubProjects(): Promise<{
+    projects: Map<string, Project>,
+    langs: Map<string, number>
+}> {
     // Retrieve list of repos from GitHub REST API.
     const res = await gh.repos.listForUser({
         username: "rohankhayech",
@@ -28,18 +31,34 @@ export async function getGitHubProjects(): Promise<Map<string, Project>> {
     // Load projects and frameworks
     const {allPlatforms, allFrameworks, allTechSkills} = await loadCategories()
 
+    // Keep track of all repository languages and total bytes.
+    const allLanguages: Map<string, number> = new Map()
+    let totalBytes = 0;
+
     // Collate list of projects.
     const projects: Project[] = await Promise.all(repos
         ?.filter((repo: any) => repo.name != 'rohankhayech')
         .map(async (repo: any) => {
             const {type, platforms, frameworks, techSkills} = processRepoTopics(repo.topics, allPlatforms, allFrameworks, allTechSkills)
+            
+            // Process languages and update total code bytes
+            const langs = await getRepoLanguages(repo.name)
+            langs.forEach(l => {
+                if (allLanguages.has(l[0])) {
+                    allLanguages.set(l[0], allLanguages.get(l[0])!+l[1])
+                } else {
+                    allLanguages.set(l[0],l[1])
+                }
+            })
+            totalBytes += langs.map(l=>l[1]).reduce((a,b)=>a+b)
+
             return {
                 name: formatProjectName(repo.name),
                 repoName: repo.name,
                 desc: repo.description,
                 type: type,
                 url: repo.html_url,
-                langs: await getRepoLanguages(repo.name),
+                langs: langs.map(l=>l[0]), // Language name
                 frameworks: frameworks,
                 platforms: platforms,
                 personalSkills: [],
@@ -48,7 +67,11 @@ export async function getGitHubProjects(): Promise<Map<string, Project>> {
         })
     )
 
-    return new Map(projects.map(p => [p.repoName!, p]))
+    return {
+        projects: new Map(projects.map(p => [p.repoName!, p])),
+        // Convert language bytes to a percent of total.
+        langs: new Map(Array.from(allLanguages.entries()).map(l => [l[0], (l[1] / totalBytes)*100]))
+    }
 }
 
 /**
@@ -65,15 +88,18 @@ function formatProjectName(name: string): string {
  * @param name The name of the repository.
  * @returns A list of the languages used in the repository,
  */
-async function getRepoLanguages(name: string): Promise<string[]> {
+async function getRepoLanguages(name: string): Promise<[string, number][]> {
+    // Request language list from GitHub API
     const res = await gh.repos.listLanguages({
         owner: "rohankhayech",
         repo: name
     })
-    const langs = res.data
-    return Object.keys(langs)
-        .filter(lang => lang != 'Makefile' && lang != 'Dockerfile')
-        .map(lang => capitalise(lang))
+
+    // Parse and filter languages from response
+    // Return map of languages and their bytes of code.
+    return Object.entries(res.data)
+        .filter(lang => lang[0] != 'Makefile' && lang[0] != 'Dockerfile')
+        .map(lang => [capitalise(lang[0]), lang[1]!])
 }
 
 export async function getUserTagline(): Promise<string> {

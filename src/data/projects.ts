@@ -9,12 +9,19 @@ import path from "path";
  * Collates a list of merged projects from the user's Github repositories and from file.
  * @returns The list of merged projects.
  */
-export async function getAllProjects(): Promise<Project[]> {
+export async function getAllProjects(): Promise<{
+    projects: Project[],
+    topLangs: Map<string, number>
+}> {
     const repoProjects = getGitHubProjects()
     const localProjects = loadLocalProjects()
 
-    return mergeProjects(await repoProjects, await localProjects)
-        .sort((p1, p2) => p1.type - p2.type)
+    const {projects, langs} = await repoProjects
+    return {
+        projects: mergeProjects(projects, await localProjects)
+            .sort((p1, p2) => p1.type - p2.type), // Sort languages by percentage, descending.
+        topLangs: langs
+    }
 }
 
 /**

@@ -25,11 +25,13 @@ import SkillsGroup from '@/components/SkillsGroup'
 import { useMemo } from 'react'
 
 export async function getStaticProps() {
-  const projects = await getAllProjects()
+  let {projects, topLangs} = await getAllProjects()
   const jobs = await getJobs()
   const courses = await getCourses()
   const tagline = await getUserTagline()
-  const {personalSkills, techSkills, langs, frameworks, platforms} = aggregateSkills(projects, courses, jobs)
+  const topLangsList = Array.from(topLangs.entries()).sort((l1,l2)=>l2[1]-l1[1])
+  console.log(topLangsList)
+  const {personalSkills, techSkills, langs, frameworks, platforms} = aggregateSkills(topLangsList, projects, courses, jobs)
 
   return {
     props: {
@@ -40,13 +42,14 @@ export async function getStaticProps() {
       personalSkills,
       techSkills,
       langs,
+      topLangs: topLangsList,
       frameworks,
       platforms
     }
   }
 }
 
-export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, frameworks, platforms}: {
+export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, topLangs, frameworks, platforms}: {
   tagline: string, 
   projects: Project[], 
   jobs: Experience[], 
@@ -54,6 +57,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
   personalSkills: string[],
   techSkills: string[],
   langs: string[],
+  topLangs: [string, number][],
   frameworks: string[],
   platforms: string[]
 }) {

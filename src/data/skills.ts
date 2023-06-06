@@ -9,6 +9,7 @@ import Project from "@/model/Project";
  * @returns A categorised list of skills.
  */
 export function aggregateSkills(
+    topLangs: [string, number][],
     projects: Project[], 
     courses: Experience[], 
     jobs: Experience[]
@@ -19,13 +20,21 @@ export function aggregateSkills(
     frameworks: string[],
     platforms: string[]
 } {
+    const projectLangs = topLangs
+        .map(l => l[0]) // Language name
+
+    // Combine all projects and experiences into an array.
     const all = [projects, courses, jobs].flat()
+
+    // Extract each skill category list from each entry and flatten the arrays.
     const personalSkills = all.map(x=>x.personalSkills ?? []).flat(2)
     const techSkills = all.map(x => x.techSkills ?? []).flat(2)
-    const langs = all.map(x => x.langs ?? []).flat(2)
     const frameworks = all.map(x => x.frameworks ?? []).flat(2)
     const platforms = all.map(x => x.platforms ?? []).flat(2)
 
+    // Combine with sorted language list first to preserve order.
+    const langs = [projectLangs, all.map(x => x.langs ?? []).flat(2)].flat()
+    
     return {
         personalSkills: Array.from((new Set(personalSkills)).values()),
         techSkills: Array.from((new Set(techSkills)).values()),
