@@ -109,7 +109,7 @@ function FilterBar(props: {
     }
 
     return (
-        <Stack direction="row" spacing={1} >
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap >
             {props.selType !== undefined && <Chip label={`Type: ${typeName}`} onDelete={props.onClearType} />}
             {props.selLang && <Chip label={`Language: ${props.selLang}`} onDelete={props.onClearLang}/>}
             {props.selPlat && <Chip label={`Platform: ${props.selPlat}`} onDelete={props.onClearPlat} />}

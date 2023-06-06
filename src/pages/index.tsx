@@ -6,7 +6,9 @@ import {
   Grid, 
   Alert,
   Link,
-  AlertTitle
+  AlertTitle,
+  useTheme,
+  useMediaQuery
 } from '@mui/material'
 import Header from '@/components/Header'
 import Section from '@/components/Section'
@@ -35,14 +37,18 @@ export async function getStaticProps() {
 }
 
 export default function Home({tagline, projects, jobs, courses}: {tagline: string, projects: Project[], jobs: Experience[], courses: Experience[]}) {
+  const theme = useTheme()
+  const largeScreen = useMediaQuery(theme.breakpoints.up('xl'))
+  
   return (
     <main>
       <Stack
         direction="column"
-        justifyContent="center"
-        alignItems="flex-start"
-        spacing={3}
-        sx = {{margin: 4}}
+        spacing={4}
+        sx = {{
+          marginX: largeScreen ? 8 : 4,
+          marginY: 4
+        }}
       >
         <Alert severity="warning" sx={{width: "100%"}}>
           <AlertTitle>Work in Progress</AlertTitle>
@@ -50,42 +56,60 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
           <br/>
           <strong> Please see my <Link href="https://github.com/rohankhayech">GitHub</Link> and <Link href="https://www.linkedin.com/in/rohan-khayech-356b01228/">LinkedIn</Link> profiles for my up-to-date portfolio and contact information.</strong>
         </Alert>
-        <Header name="Rohan Khayech" tagline={tagline} profileImgSrc="https://avatars.githubusercontent.com/rohankhayech" />
-        <Section title='About Me'>
-          <Typography variant="body1">
-            I am a passionate software engineering graduate from Curtin University, with an interest in Java/Kotlin, Android development and user interface design.
-            <br/><br/>
-            Recently I have been working on a variety of software engineering projects to learn and gain experience with the latest software development frameworks, constantly improving my skills in programming and project management.
-          </Typography>
-        </Section>
-        <ProjectsSection projects={projects}/>
-        <Section title="Education">
-          <Grid container>
-            {courses.map(course => (
-              <Grid item
-                key={`c-${course.title}`}
-                xs={12} md={6} xl={4}
-                sx={{ paddingRight: 2, paddingBottom: 2 }}
-              >
-                <ExperienceCard experience={course}/>
+        <Stack direction={largeScreen ? "row" : "column"} spacing={largeScreen ? 8 : 3}>
+          <Stack
+            spacing={3}
+            sx={{
+              marginTop: largeScreen ? 4 : 0,
+              width: largeScreen ? "25%" : "auto"
+            }}
+          >
+            <Header name="Rohan Khayech" tagline={tagline} profileImgSrc="https://avatars.githubusercontent.com/rohankhayech" />
+            <Section title='About Me'>
+              <Typography variant="body1">
+                I am a passionate software engineering graduate from Curtin University, with an interest in Java/Kotlin, Android development and user interface design.
+                <br/><br/>
+                Recently I have been working on a variety of software engineering projects to learn and gain experience with the latest software development frameworks, constantly improving my skills in programming and project management.
+              </Typography>
+            </Section>
+          </Stack>
+          <Stack
+            spacing={2}
+            sx={{
+              marginTop: largeScreen ? 8 : 0,
+              width: largeScreen ? "75%" : "auto"
+            }}
+          >
+            <ProjectsSection projects={projects}/>
+            <Section title="Education">
+              <Grid container>
+                {courses.map(course => (
+                  <Grid item
+                    key={`c-${course.title}`}
+                    xs={12} md={6} xl={4}
+                    sx={{ paddingRight: 2, paddingBottom: 2 }}
+                  >
+                    <ExperienceCard experience={course}/>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-        </Section>
-        <Section title="Work Experience">
-          <Grid container>
-            {jobs.map(job => (
-              <Grid item
-                key={`j-${job.title}`}
-                xs={12} md={6} xl={4}
-                sx={{ paddingRight: 2, paddingBottom: 2 }}
-              >
-                <ExperienceCard experience={job}/>
+            </Section>
+            <Section title="Work Experience">
+              <Grid container>
+                {jobs.map(job => (
+                  <Grid item
+                    key={`j-${job.title}`}
+                    xs={12} md={6} xl={4}
+                    sx={{ paddingRight: 2, paddingBottom: 2 }}
+                  >
+                    <ExperienceCard experience={job}/>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-        </Section>
-        <Typography variant='caption'>Copyright © {(new Date()).getFullYear()} Rohan Khayech</Typography>
+            </Section>
+          </Stack>
+        </Stack>
+        <Typography alignSelf={'center'} variant='caption'>Copyright © {(new Date()).getFullYear()} Rohan Khayech</Typography>
       </Stack>
     </main>
   )
