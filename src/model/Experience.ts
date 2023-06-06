@@ -7,7 +7,7 @@ export default interface Experience {
     endMonth?: string
     personalSkills?: string[]
     techSkills?: string[]
-    languages?: string[]
+    langs?: string[]
     frameworks?: string[]
     platforms?: string[]
 }

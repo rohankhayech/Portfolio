@@ -10,6 +10,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material'
+
 import Header from '@/components/Header'
 import Section from '@/components/Section'
 import ExperienceCard from '@/components/ExperienceCard'
@@ -19,27 +20,52 @@ import Project from '@/model/Project'
 import { getCourses, getJobs } from '@/data/experiences'
 import Experience from '@/model/Experience'
 import ProjectsSection from '@/components/ProjectsSection'
+import { aggregateSkills } from '@/data/skills'
+import SkillsGroup from '@/components/SkillsGroup'
+import { useMemo } from 'react'
 
 export async function getStaticProps() {
   const projects = await getAllProjects()
   const jobs = await getJobs()
   const courses = await getCourses()
   const tagline = await getUserTagline()
+  const {personalSkills, techSkills, langs, frameworks, platforms} = aggregateSkills(projects, courses, jobs)
 
   return {
     props: {
       tagline,
       projects,
       jobs,
-      courses
+      courses,
+      personalSkills,
+      techSkills,
+      langs,
+      frameworks,
+      platforms
     }
   }
 }
 
-export default function Home({tagline, projects, jobs, courses}: {tagline: string, projects: Project[], jobs: Experience[], courses: Experience[]}) {
+export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, frameworks, platforms}: {
+  tagline: string, 
+  projects: Project[], 
+  jobs: Experience[], 
+  courses: Experience[],
+  personalSkills: string[],
+  techSkills: string[],
+  langs: string[],
+  frameworks: string[],
+  platforms: string[]
+}) {
   const theme = useTheme()
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'))
   const largeScreen = useMediaQuery(theme.breakpoints.up('xl'))
   
+  const tech = useMemo(() => 
+    techSkills.concat(platforms.map(p=>`${p} Development`)), 
+    [techSkills, platforms]
+  )
+
   return (
     <main>
       <Stack
@@ -106,6 +132,14 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
                   </Grid>
                 ))}
               </Grid>
+            </Section>
+            <Section title="Skills">
+              <Stack direction={mobile ? "column" : "row"} spacing={4} paddingBottom={2}>
+                <SkillsGroup title="Languages" skills={langs} />
+                <SkillsGroup title="Frameworks" skills={frameworks} />
+                <SkillsGroup title="Technical Skills" skills={tech} />
+                <SkillsGroup title="Interpersonal Skills" skills={personalSkills} />
+              </Stack>
             </Section>
           </Stack>
         </Stack>

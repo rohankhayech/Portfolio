@@ -21,7 +21,7 @@
             "Collaborative Problem Solving",
             "Attention to Detail"
         ],
-        "languages": [
+        "langs": [
             "Java",
             "Python",
             "C",
@@ -52,7 +52,7 @@
         "organisation": "Shenton College",
         "startYear": "2014",
         "endYear": "2018",
-        "languages": [
+        "langs": [
             "Python",
             "SQL",
             "Pascal"
