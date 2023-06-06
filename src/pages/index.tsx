@@ -85,9 +85,7 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
             ))}
           </Grid>
         </Section>
-        <Section title="Skills">
-
-        </Section>
+        <Typography variant='caption'>Copyright © {(new Date()).getFullYear()} Rohan Khayech</Typography>
       </Stack>
     </main>
   )
