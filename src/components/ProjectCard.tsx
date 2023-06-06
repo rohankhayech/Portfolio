@@ -52,9 +52,9 @@ export default function ProjectCard(props: {
             <CardContent style={{ height: '100%' }}>
                 <Stack style={{ height: '100%' }} direction="column" justifyContent="space-between" spacing={2}>
                     <Stack direction="column" spacing={1}>
-                        <Stack direction="row" spacing={1} alignItems="center">
+                        <Stack direction="row" spacing={1} alignItems="flex-start">
                             <Tooltip title={type} placement="top">
-                                <IconButton disabled={type === "About"} sx={{padding: 0}} onClick={props.onTypeClick}>
+                                <IconButton disabled={type === "About"} sx={{marginTop: 0.5, padding: 0}} onClick={props.onTypeClick}>
                                     <Icon baseClassName="material-icons-outlined" fontSize="small">{icon}</Icon>
                                 </IconButton>
                             </Tooltip>

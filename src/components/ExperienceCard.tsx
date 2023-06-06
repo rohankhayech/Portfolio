@@ -1,15 +1,18 @@
 /* Copyright (c) 2023 Rohan Khayech */
-import { Card, CardContent, Stack, Typography } from "@mui/material"
+import { Card, CardContent, Icon, Stack, Typography } from "@mui/material"
 import TagChipGroup from "./TagChipGroup"
 import Experience from "@/model/Experience"
 
-export default function ExperienceCard(props: {experience: Experience}): JSX.Element {
+export default function ExperienceCard(props: {experience: Experience, icon: string}): JSX.Element {
     return (
         <Card style={{ height: '100%', width: '100%' }} variant="outlined">
             <CardContent style={{ height: '100%' }}>
                 <Stack style={{ height: '100%' }} direction="column" justifyContent="space-between" spacing={2}>
                     <Stack direction="column" spacing={1}>
-                        <Typography variant="subtitle1">{props.experience.title}</Typography>
+                        <Stack direction="row" spacing={1}>
+                            <Icon baseClassName="material-icons-outlined" fontSize="small" sx={{marginTop: 0.5}}>{props.icon}</Icon>
+                            <Typography variant="subtitle1">{props.experience.title}</Typography>
+                        </Stack>
                         <Typography variant="subtitle2">{props.experience.organisation}</Typography>
                         <Typography variant="body2">
                             {`${props.experience.startMonth ?? ""} ${props.experience.startYear} - ${props.experience.endMonth ?? ""} ${props.experience.endYear ?? "Present"}`}

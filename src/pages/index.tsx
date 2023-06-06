@@ -89,7 +89,7 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
                     xs={12} md={6} xl={4}
                     sx={{ paddingRight: 2, paddingBottom: 2 }}
                   >
-                    <ExperienceCard experience={course}/>
+                    <ExperienceCard experience={course} icon="school"/>
                   </Grid>
                 ))}
               </Grid>
@@ -102,7 +102,7 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
                     xs={12} md={6} xl={4}
                     sx={{ paddingRight: 2, paddingBottom: 2 }}
                   >
-                    <ExperienceCard experience={job}/>
+                    <ExperienceCard experience={job} icon="apartment"/>
                   </Grid>
                 ))}
               </Grid>
