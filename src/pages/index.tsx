@@ -23,6 +23,7 @@ import ProjectsSection from '@/components/ProjectsSection'
 import { aggregateSkills } from '@/data/skills'
 import SkillsGroup from '@/components/SkillsGroup'
 import { useMemo } from 'react'
+import LanguageChart from '@/components/LanguageChart'
 
 export async function getStaticProps() {
   let {projects, topLangs} = await getAllProjects()
@@ -139,7 +140,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
             </Section>
             <Section title="Skills">
               <Stack direction={mobile ? "column" : "row"} spacing={4} paddingBottom={2}>
-                <SkillsGroup title="Languages" skills={langs} />
+                <LanguageChart langs={topLangs} sx={{ width: "100%" }} />
                 <SkillsGroup title="Frameworks" skills={frameworks} />
                 <SkillsGroup title="Technical Skills" skills={tech} />
                 <SkillsGroup title="Interpersonal Skills" skills={personalSkills} />
