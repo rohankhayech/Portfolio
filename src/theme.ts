@@ -10,22 +10,22 @@ export const roboto = Roboto({
 });
 
 // Create a theme instance.
-const theme = createTheme({
-    palette: {
-        mode: 'dark',
-        primary: {
-            main: '#556cd6',
+export default function getTheme(darkMode: boolean = false) {
+    return createTheme({
+        palette: {
+            mode: darkMode ? 'dark' : 'light',
+            primary: {
+                main: '#556cd6',
+            },
+            secondary: {
+                main: '#19857b',
+            },
+            error: {
+                main: red.A400,
+            },
         },
-        secondary: {
-            main: '#19857b',
+        typography: {
+            fontFamily: roboto.style.fontFamily,
         },
-        error: {
-            main: red.A400,
-        },
-    },
-    typography: {
-        fontFamily: roboto.style.fontFamily,
-    },
-});
-
-export default theme;
+    })
+}
