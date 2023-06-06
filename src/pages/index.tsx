@@ -46,7 +46,7 @@ export default function Home({tagline, projects, jobs, courses}: {tagline: strin
       >
         <Alert severity="warning" sx={{width: "100%"}}>
           <AlertTitle>Work in Progress</AlertTitle>
-          I'm currently building this website to learn <em>React</em>, <em>Next.js</em> and web development best practices. 
+          I&apos;m currently building this website to learn <em>React</em>, <em>Next.js</em> and web development best practices. 
           <br/>
           <strong> Please see my <Link href="https://github.com/rohankhayech">GitHub</Link> and <Link href="https://www.linkedin.com/in/rohan-khayech-356b01228/">LinkedIn</Link> profiles for my up-to-date portfolio and contact information.</strong>
         </Alert>
