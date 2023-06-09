@@ -25,6 +25,7 @@ import SkillsGroup from '@/components/SkillsGroup'
 import { useMemo } from 'react'
 import { getLanguageColors } from '@/data/langs'
 import ChipCircleIcon from '@/components/ChipCircleIcon'
+import Head from 'next/head'
 
 export async function getStaticProps() {
   let {projects, topLangs} = await getAllProjects()
@@ -75,7 +76,10 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
   )
 
   const langColors = useMemo(() => new Map(langColorsList), [langColorsList])
-  return (
+  return <>
+    <Head>
+      <title>{`Portfolio | Rohan Khayech - ${tagline}`}</title>
+    </Head>
     <main>
       <Stack
         direction="column"
@@ -155,5 +159,5 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
         <Typography alignSelf={'center'} variant='caption'>Copyright © {(new Date()).getFullYear()} Rohan Khayech</Typography>
       </Stack>
     </main>
-  )
+  </>
 }
