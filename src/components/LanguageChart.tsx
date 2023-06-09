@@ -29,13 +29,13 @@ export default function LanguageChart(props: {
             <Stack direction="row" spacing={2} sx={{ width: "100%" }}>
                 <Stack spacing ={1.5} sx={{ height: "100%" }} >
                     {langs.map(lang => (
-                        <Typography variant="subtitle1">{lang[0]}</Typography>
+                        <Typography key={lang[0]} variant="subtitle1">{lang[0]}</Typography>
                     ))}
                 </Stack>
                 <Stack spacing={1} sx={{ width: "100%" }}>
                     {langs.map(lang => {
                         const small = (lang[1] < highest / 2)
-                        return <Stack direction="row" alignItems="center" spacing={1}>
+                        return <Stack key={lang[0]} direction="row" alignItems="center" spacing={1}>
                             <Chip label={!small ? `${lang[1].toFixed(1)}%`:undefined} key={`lg-chart-${lang[0]}`} sx={{ width: `${lang[1] / highest * 100}%` }} />
                             {small &&
                                 <Typography variant="caption">{`${lang[1].toFixed(1)}%`}</Typography>
