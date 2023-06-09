@@ -24,32 +24,15 @@ export default function ProjectsSection(props: {
     const [selLang, setSelLang] = useState<string|undefined>(undefined) 
     const [selPlat, setSelPlat] = useState<string | undefined>(undefined) 
     const [selFramework, setSelFramework] = useState<string | undefined>(undefined) 
-    
-    /**
-     * Filters the project list with the current filters in state.
-     * @returns The filtered project list.
-     */
-    const filterProjects: () => Project[] = useCallback(() => {
-        let fProjects = props.projects
-        if (selType !== undefined) {
-            fProjects = fProjects.filter(p => p.type === selType)
-        }
-        if (selLang !== undefined) {
-            fProjects = fProjects.filter(p => p.langs.includes(selLang))
-        }
-        if (selFramework !== undefined) {
-            fProjects = fProjects.filter(p => p.frameworks.includes(selFramework))
-        }
-        if (selPlat !== undefined) {
-            fProjects = fProjects.filter(p => p.platforms.includes(selPlat))
-        }
-        return fProjects
-    }, [selType, selLang, selFramework, selPlat, props.projects])
 
     // Filtered projects.
-    const fProjects = useMemo(
-        () => filterProjects(),
-        [filterProjects]
+    const fProjects = useMemo(() => 
+        props.projects
+            .filter(p => selType === undefined || p.type === selType)
+            .filter(p => selLang === undefined || p.langs.includes(selLang))
+            .filter(p => selFramework === undefined || p.frameworks.includes(selFramework))
+            .filter(p => selPlat === undefined || p.platforms.includes(selPlat)),
+        [props.projects, selFramework, selLang, selPlat, selType]
     )
 
     // Component
