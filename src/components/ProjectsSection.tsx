@@ -4,7 +4,7 @@ import { Chip, Grid, Stack } from "@mui/material";
 import Section from "./Section";
 import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
 import ProjectCard from "./ProjectCard";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 /**
  * UI section displaying the specified list of software projects 
@@ -21,17 +21,11 @@ export default function ProjectsSection(props: {projects: Project[]}) : JSX.Elem
     const [selPlat, setSelPlat] = useState<string | undefined>(undefined) 
     const [selFramework, setSelFramework] = useState<string | undefined>(undefined) 
     
-    // Filtered projects.
-    const fProjects = useMemo(
-        () => filterProjects(),
-        [props.projects, selType, selLang, selFramework, selPlat]
-    )
-
     /**
      * Filters the project list with the current filters in state.
      * @returns The filtered project list.
      */
-    function filterProjects(): Project[] {
+    const filterProjects: () => Project[] = useCallback(() => {
         let fProjects = props.projects
         if (selType !== undefined) {
             fProjects = fProjects.filter(p => p.type === selType)
@@ -46,7 +40,13 @@ export default function ProjectsSection(props: {projects: Project[]}) : JSX.Elem
             fProjects = fProjects.filter(p => p.platforms.includes(selPlat))
         }
         return fProjects
-    }
+    }, [selType, selLang, selFramework, selPlat, props.projects])
+
+    // Filtered projects.
+    const fProjects = useMemo(
+        () => filterProjects(),
+        [filterProjects]
+    )
 
     // Component
     return (

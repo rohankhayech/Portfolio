@@ -30,7 +30,6 @@ export async function getStaticProps() {
   const courses = await getCourses()
   const tagline = await getUserTagline()
   const topLangsList = Array.from(topLangs.entries()).sort((l1,l2)=>l2[1]-l1[1])
-  console.log(topLangsList)
   const {personalSkills, techSkills, langs, frameworks, platforms} = aggregateSkills(topLangsList, projects, courses, jobs)
 
   return {
