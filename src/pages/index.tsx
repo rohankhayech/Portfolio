@@ -23,6 +23,8 @@ import ProjectsSection from '@/components/ProjectsSection'
 import { aggregateSkills } from '@/data/skills'
 import SkillsGroup from '@/components/SkillsGroup'
 import { useMemo } from 'react'
+import { getLanguageColors } from '@/data/langs'
+import ChipCircleIcon from '@/components/ChipCircleIcon'
 
 export async function getStaticProps() {
   let {projects, topLangs} = await getAllProjects()
@@ -31,6 +33,7 @@ export async function getStaticProps() {
   const tagline = await getUserTagline()
   const topLangsList = Array.from(topLangs.entries()).sort((l1,l2)=>l2[1]-l1[1])
   const {personalSkills, techSkills, langs, frameworks, platforms} = aggregateSkills(topLangsList, projects, courses, jobs)
+  const langColors = await getLanguageColors(langs)
 
   return {
     props: {
@@ -42,13 +45,14 @@ export async function getStaticProps() {
       techSkills,
       langs,
       topLangs: topLangsList,
+      langColorsList: Array.from(langColors.entries()),
       frameworks,
       platforms
     }
   }
 }
 
-export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, topLangs, frameworks, platforms}: {
+export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, topLangs, langColorsList, frameworks, platforms}: {
   tagline: string, 
   projects: Project[], 
   jobs: Experience[], 
@@ -57,6 +61,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
   techSkills: string[],
   langs: string[],
   topLangs: [string, number][],
+  langColorsList: [string, string][],
   frameworks: string[],
   platforms: string[]
 }) {
@@ -69,6 +74,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
     [techSkills, platforms]
   )
 
+  const langColors = useMemo(() => new Map(langColorsList), [langColorsList])
   return (
     <main>
       <Stack
@@ -109,7 +115,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
               width: largeScreen ? "75%" : "auto"
             }}
           >
-            <ProjectsSection projects={projects}/>
+            <ProjectsSection projects={projects} langColors={langColors}/>
             <Section title="Education">
               <Grid container>
                 {courses.map(course => (
@@ -138,7 +144,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
             </Section>
             <Section title="Skills">
               <Stack direction={mobile ? "column" : "row"} spacing={4} paddingBottom={2}>
-                <SkillsGroup title="Languages" skills={langs} />
+                <SkillsGroup title="Languages" icon={l => <ChipCircleIcon color={langColors.get(l)!} size="medium"/> } skills={langs} />
                 <SkillsGroup title="Frameworks" skills={frameworks} />
                 <SkillsGroup title="Technical Skills" skills={tech} />
                 <SkillsGroup title="Interpersonal Skills" skills={personalSkills} />

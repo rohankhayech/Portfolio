@@ -1,11 +1,12 @@
 /* Copyright (c) 2023 Rohan Khayech */
 
-import { AvatarGroup, Chip, Icon, Stack, Tooltip } from "@mui/material";
+import { Chip, Icon, Stack, Tooltip } from "@mui/material";
+import { useMemo } from "react";
 
 /**
  * UI element containing a row of tag chips with a leading icon.
  * @param props.items List of tag items to display in the chip group.
- * @param props.keyPrefix Prefix to prepend to each item's key.
+ * @param props.chipLeadingIcon Optional function that determines each chip's leading icon. Takes the chip's item as a parameter.
  * @param props.title Title of the chip group.
  * @param props.leadingIcon ID of the material icon to display before the chip group.
  * @param props.maxItems Limit of items to display. Additonal items will be represented by an overflow chip. Defaults to 4 items.
@@ -14,8 +15,8 @@ import { AvatarGroup, Chip, Icon, Stack, Tooltip } from "@mui/material";
  * @author Rohan Khayech
  */
 export default function TagChipGroup(props: { 
-    items: string[], 
-    keyPrefix: string, 
+    items: string[],
+    chipLeadingicon?: (item: string) => JSX.Element,
     title: string, 
     leadingIcon: string, 
     maxItems?: number,
@@ -34,17 +35,9 @@ export default function TagChipGroup(props: {
                 <Tooltip title={props.title} placement="right">
                     <Icon fontSize="small">{props.leadingIcon}</Icon>
                 </Tooltip>
-                {props.items.slice(0,maxItems).map(item => (
-                    <Chip
-                        key={`${props.keyPrefix}-` + item}
-                        label={item}
-                        size="small"
-                        variant="outlined"
-                        clickable={props.onClick != undefined}
-                        onClick={() => { if (props.onClick) props.onClick(item) }}
-                    />
-                ))
-                }
+                {props.items.slice(0,maxItems).map((item, i) => 
+                    <TagChip key={item} item={item} icon={props.chipLeadingicon} onClick={props.onClick}/>
+                )}
                 {props.items.length > maxItems &&
                     <Tooltip 
                         title={props.items.slice(maxItems,props.items.length).join(", ")} 
@@ -59,4 +52,26 @@ export default function TagChipGroup(props: {
             </Stack>
         }
     </>)
+}
+
+/**
+ * Tag chip with an optional leading icon.
+ * @param item Label for the chip.
+ * @param icon Leading icon element. Takes the chip's item as a parameter.
+ * @param onClick Function to handle click events for each chip. Takes the chip's item as a parameter.
+ */
+function TagChip({item, icon, onClick}: {
+    item: string,  
+    icon?: (item: string) => JSX.Element,
+    onClick?: (item: string) => void
+}): JSX.Element {
+    const iconElement = useMemo(() => icon ? icon(item) : <></>, [item, icon])
+    return <Chip
+        label={item}
+        icon={iconElement}
+        size="small"
+        variant="outlined"
+        clickable={onClick != undefined}
+        onClick={() => { if (onClick) onClick(item) }}
+    />
 }

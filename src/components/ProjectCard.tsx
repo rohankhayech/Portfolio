@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import TagChipGroup from "./TagChipGroup";
 import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
+import CircleChipIcon from "./ChipCircleIcon";
 
 /**
  * UI component that displays a software project, featuring clickable categories.
@@ -24,6 +25,7 @@ import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
  */
 export default function ProjectCard(props: {
     project: Project,
+    langColors: Map<string, string>,
     onTypeClick: () => void,
     onLangClick: (item: string) => void,
     onPlatClick: (item: string) => void,
@@ -65,9 +67,17 @@ export default function ProjectCard(props: {
                         <Typography variant="body2">{props.project.desc}</Typography>
                     </Stack>
                     <Stack direction="column" spacing={1}>
-                        <TagChipGroup items={props.project.langs} keyPrefix="lg" title="Languages" leadingIcon="data_object" onClick={props.onLangClick} />
-                        <TagChipGroup items={props.project.platforms} keyPrefix="pf" title="Platforms" leadingIcon="devices" onClick={props.onPlatClick} />
-                        <TagChipGroup items={props.project.frameworks} keyPrefix="fw" title="Frameworks/Libraries" leadingIcon="dynamic_form" onClick={props.onFrameworkClick} />
+                        <TagChipGroup 
+                            items={props.project.langs}
+                            chipLeadingicon={l => 
+                                <CircleChipIcon color={props.langColors.get(l)!} size="small"/>
+                            } 
+                            title="Languages" 
+                            leadingIcon="data_object" 
+                            onClick={props.onLangClick} 
+                        />
+                        <TagChipGroup items={props.project.platforms} title="Platforms" leadingIcon="devices" onClick={props.onPlatClick} />
+                        <TagChipGroup items={props.project.frameworks} title="Frameworks/Libraries" leadingIcon="dynamic_form" onClick={props.onFrameworkClick} />
                     </Stack>
                 </Stack>
             </CardContent>

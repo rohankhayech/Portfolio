@@ -10,10 +10,14 @@ import { useCallback, useMemo, useState } from "react";
  * UI section displaying the specified list of software projects 
  * with options to filter by type, language, platform and framework.
  * @param props.projects List of software projects to display.
+ * @param props.langColors Map of languages and their colors.
  * 
  * @author Rohan Khayech
  */
-export default function ProjectsSection(props: {projects: Project[]}) : JSX.Element {
+export default function ProjectsSection(props: {
+    projects: Project[], 
+    langColors: Map<string, string>
+}) : JSX.Element {
     
     // Filter selection state.
     const [selType, setSelType] = useState<ProjectType | undefined>(undefined) 
@@ -70,6 +74,7 @@ export default function ProjectsSection(props: {projects: Project[]}) : JSX.Elem
                     >
                         <ProjectCard 
                             project={project}
+                            langColors={props.langColors}
                             onTypeClick={()=>setSelType(project.type)}
                             onLangClick={setSelLang}
                             onPlatClick={setSelPlat}

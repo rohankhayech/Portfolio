@@ -20,19 +20,19 @@ export default function ExperienceCard(props: {experience: Experience, icon: str
                     </Stack>
                     <Stack direction="column" spacing={1}>
                         {props.experience.personalSkills &&
-                            <TagChipGroup items={props.experience.personalSkills} title="Interpersonal Skills" keyPrefix="sk" leadingIcon="group" maxItems={3} />
+                            <TagChipGroup items={props.experience.personalSkills} title="Interpersonal Skills" leadingIcon="group" maxItems={3} />
                         }
                         {props.experience.techSkills &&
-                            <TagChipGroup items={props.experience.techSkills} title="Technical Skills" keyPrefix="sk" leadingIcon="design_services" maxItems={3} />
+                            <TagChipGroup items={props.experience.techSkills} title="Technical Skills" leadingIcon="design_services" maxItems={3} />
                         }
                         {props.experience.langs &&
-                            <TagChipGroup items={props.experience.langs} title="Language Experience" keyPrefix="sk" leadingIcon="data_object" />
+                            <TagChipGroup items={props.experience.langs} title="Language Experience" leadingIcon="data_object" />
                         }
                         {props.experience.frameworks &&
-                            <TagChipGroup items={props.experience.frameworks} title="Framework/Library Experience" keyPrefix="sk" leadingIcon="dynamic_form" />
+                            <TagChipGroup items={props.experience.frameworks} title="Framework/Library Experience"  leadingIcon="dynamic_form" />
                         }
                         {props.experience.platforms &&
-                            <TagChipGroup items={props.experience.platforms} title="Platform Development Experience" keyPrefix="sk" leadingIcon="devices" />
+                            <TagChipGroup items={props.experience.platforms} title="Platform Development Experience" leadingIcon="devices" />
                         }
                     </Stack>
                 </Stack>
