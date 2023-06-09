@@ -5,6 +5,7 @@ import Section from "./Section";
 import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
 import ProjectCard from "./ProjectCard";
 import { useCallback, useMemo, useState } from "react";
+import { platform } from "os";
 
 /**
  * UI section displaying the specified list of software projects 
@@ -35,6 +36,13 @@ export default function ProjectsSection(props: {
         [props.projects, selFramework, selLang, selPlat, selType]
     )
 
+    function scrollIntoView() {
+        const element = document.getElementById("software-portfolio")
+        if (element) {
+            element.scrollIntoView({behavior: "smooth"})
+        }
+    }
+
     // Component
     return (
         <Section title='Software Portfolio'>
@@ -44,7 +52,7 @@ export default function ProjectsSection(props: {
                 selPlat={selPlat}
                 selFramework={selFramework}
                 onClearType={() => setSelType(undefined)}
-                onClearLang={()=>setSelLang(undefined)}
+                onClearLang={()=> setSelLang(undefined)}
                 onClearPlat={() => setSelPlat(undefined)}
                 onClearFramework={() => setSelFramework(undefined)}
             />
@@ -58,10 +66,22 @@ export default function ProjectsSection(props: {
                         <ProjectCard 
                             project={project}
                             langColors={props.langColors}
-                            onTypeClick={()=>setSelType(project.type)}
-                            onLangClick={setSelLang}
-                            onPlatClick={setSelPlat}
-                            onFrameworkClick={setSelFramework}
+                            onTypeClick={() => { 
+                                setSelType(project.type); 
+                                scrollIntoView() 
+                            }}
+                            onLangClick={lang => {
+                                setSelLang(lang);
+                                scrollIntoView()
+                            }}
+                            onPlatClick={platform => {
+                                setSelPlat(platform);
+                                scrollIntoView()
+                            }}
+                            onFrameworkClick={framework => {
+                                setSelFramework(framework);
+                                scrollIntoView()
+                            }}
                         />
                     </Grid>
                 ))}
