@@ -24,45 +24,59 @@ import { aggregateSkills } from '@/data/skills'
 import SkillsGroup from '@/components/SkillsGroup'
 import { useMemo } from 'react'
 import { getLanguageColors } from '@/data/langs'
-import ChipCircleIcon from '@/components/ChipCircleIcon'
 import Head from 'next/head'
 import LanguageChart from '@/components/LanguageChart'
 
 export async function getStaticProps() {
-  let {projects, topLangs} = await getAllProjects()
+  
+  // Fetch data
+  const tagline = getUserTagline()
+  const {projects, topLangs} = await getAllProjects()
   const jobs = await getJobs()
   const courses = await getCourses()
-  const tagline = await getUserTagline()
   const topLangsList = Array.from(topLangs.entries()).sort((l1,l2)=>l2[1]-l1[1])
-  const {personalSkills, techSkills, langs, frameworks, platforms} = aggregateSkills(topLangsList, projects, courses, jobs)
-  const langColors = await getLanguageColors(langs)
+  
+  // Aggregate skills
+  const {
+    personalSkills, 
+    techSkills, 
+    langs,
+    frameworks, 
+    platforms
+  } = aggregateSkills(
+    topLangsList, 
+    projects, 
+    courses, 
+    jobs
+  )
+
+  // Fetch language colors
+  const langColors = getLanguageColors(langs.map(l => l[0]))
 
   return {
     props: {
-      tagline,
+      tagline: await tagline,
       projects,
       jobs,
       courses,
       personalSkills,
       techSkills,
       langs,
-      topLangs: topLangsList,
-      langColorsList: Array.from(langColors.entries()),
+      langColorsList: Array.from((await langColors).entries()),
       frameworks,
       platforms
     }
   }
 }
 
-export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, topLangs, langColorsList, frameworks, platforms}: {
+export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, langColorsList, frameworks, platforms}: {
   tagline: string, 
   projects: Project[], 
   jobs: Experience[], 
   courses: Experience[],
   personalSkills: string[],
   techSkills: string[],
-  langs: string[],
-  topLangs: [string, number][],
+  langs: [string,number][],
   langColorsList: [string, string][],
   frameworks: string[],
   platforms: string[]
@@ -149,7 +163,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
             </Section>
             <Section title="Skills">
               <Stack direction={mobile ? "column" : "row"} spacing={4} paddingBottom={2}>
-                <LanguageChart langs={topLangs} langColors={langColors} sx={{ width: "100%" }} />
+                <LanguageChart langs={langs} langColors={langColors} sx={{ width: "100%" }} />
                 <SkillsGroup title="Frameworks" skills={frameworks} />
                 <SkillsGroup title="Technical Skills" skills={tech} />
                 <SkillsGroup title="Interpersonal Skills" skills={personalSkills} />
