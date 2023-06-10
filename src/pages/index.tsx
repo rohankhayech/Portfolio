@@ -149,7 +149,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
             </Section>
             <Section title="Skills">
               <Stack direction={mobile ? "column" : "row"} spacing={4} paddingBottom={2}>
-                <LanguageChart langs={topLangs} sx={{ width: "100%" }} />
+                <LanguageChart langs={topLangs} langColors={langColors} sx={{ width: "100%" }} />
                 <SkillsGroup title="Frameworks" skills={frameworks} />
                 <SkillsGroup title="Technical Skills" skills={tech} />
                 <SkillsGroup title="Interpersonal Skills" skills={personalSkills} />

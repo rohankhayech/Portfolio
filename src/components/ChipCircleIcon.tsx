@@ -7,7 +7,7 @@ import { Icon } from "@mui/material";
  * @param color The color of the icon.
  * @param size The size of the chip.
  */
-export default function ChipCircleIcon({color, size}: {color: string, size: "small" | "medium"}): JSX.Element {
+export default function ChipCircleIcon({color, size}: {color?: string, size: "small" | "medium"}): JSX.Element {
     let fontSize: number
     switch (size) {
         case 'small': fontSize = 10; break;
