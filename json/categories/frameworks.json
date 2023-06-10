@@ -10,5 +10,7 @@
     "mui": "MUI",
     "javafx": "JavaFX",
     "github-actions": "GitHub Actions",
-    "github-pages": "GitHub Pages"
+    "gh-actions": "GitHub Actions",
+    "github-pages": "GitHub Pages",
+    "gh-pages": "GitHub Pages"
 }
