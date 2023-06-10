@@ -162,7 +162,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
               </Grid>
             </Section>
             <Section title="Skills">
-              <Grid container paddingBottom={2}>
+              <Grid container paddingBottom={2} marginRight={-4} marginBottom={-4}>
                 <Grid item xs={12} sm={6} lg={3} sx={{ paddingRight: 4, paddingBottom: 4 }}>
                     <LanguageChart langs={langs} langColors={langColors} sx={{ width: "100%" }} />
                 </Grid>
