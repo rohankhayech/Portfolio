@@ -5,48 +5,43 @@ import Section from "./Section";
 import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
 import ProjectCard from "./ProjectCard";
 import { useCallback, useMemo, useState } from "react";
+import { platform } from "os";
 
 /**
  * UI section displaying the specified list of software projects 
  * with options to filter by type, language, platform and framework.
  * @param props.projects List of software projects to display.
+ * @param props.langColors Map of languages and their colors.
  * 
  * @author Rohan Khayech
  */
-export default function ProjectsSection(props: {projects: Project[]}) : JSX.Element {
+export default function ProjectsSection(props: {
+    projects: Project[], 
+    langColors: Map<string, string>
+}) : JSX.Element {
     
     // Filter selection state.
     const [selType, setSelType] = useState<ProjectType | undefined>(undefined) 
     const [selLang, setSelLang] = useState<string|undefined>(undefined) 
     const [selPlat, setSelPlat] = useState<string | undefined>(undefined) 
     const [selFramework, setSelFramework] = useState<string | undefined>(undefined) 
-    
-    /**
-     * Filters the project list with the current filters in state.
-     * @returns The filtered project list.
-     */
-    const filterProjects: () => Project[] = useCallback(() => {
-        let fProjects = props.projects
-        if (selType !== undefined) {
-            fProjects = fProjects.filter(p => p.type === selType)
-        }
-        if (selLang !== undefined) {
-            fProjects = fProjects.filter(p => p.langs.includes(selLang))
-        }
-        if (selFramework !== undefined) {
-            fProjects = fProjects.filter(p => p.frameworks.includes(selFramework))
-        }
-        if (selPlat !== undefined) {
-            fProjects = fProjects.filter(p => p.platforms.includes(selPlat))
-        }
-        return fProjects
-    }, [selType, selLang, selFramework, selPlat, props.projects])
 
     // Filtered projects.
-    const fProjects = useMemo(
-        () => filterProjects(),
-        [filterProjects]
+    const fProjects = useMemo(() => 
+        props.projects
+            .filter(p => selType === undefined || p.type === selType)
+            .filter(p => selLang === undefined || p.langs.includes(selLang))
+            .filter(p => selFramework === undefined || p.frameworks.includes(selFramework))
+            .filter(p => selPlat === undefined || p.platforms.includes(selPlat)),
+        [props.projects, selFramework, selLang, selPlat, selType]
     )
+
+    function scrollIntoView() {
+        const element = document.getElementById("software-portfolio")
+        if (element) {
+            element.scrollIntoView({behavior: "smooth"})
+        }
+    }
 
     // Component
     return (
@@ -57,7 +52,7 @@ export default function ProjectsSection(props: {projects: Project[]}) : JSX.Elem
                 selPlat={selPlat}
                 selFramework={selFramework}
                 onClearType={() => setSelType(undefined)}
-                onClearLang={()=>setSelLang(undefined)}
+                onClearLang={()=> setSelLang(undefined)}
                 onClearPlat={() => setSelPlat(undefined)}
                 onClearFramework={() => setSelFramework(undefined)}
             />
@@ -70,10 +65,23 @@ export default function ProjectsSection(props: {projects: Project[]}) : JSX.Elem
                     >
                         <ProjectCard 
                             project={project}
-                            onTypeClick={()=>setSelType(project.type)}
-                            onLangClick={setSelLang}
-                            onPlatClick={setSelPlat}
-                            onFrameworkClick={setSelFramework}
+                            langColors={props.langColors}
+                            onTypeClick={() => { 
+                                setSelType(project.type); 
+                                scrollIntoView() 
+                            }}
+                            onLangClick={lang => {
+                                setSelLang(lang);
+                                scrollIntoView()
+                            }}
+                            onPlatClick={platform => {
+                                setSelPlat(platform);
+                                scrollIntoView()
+                            }}
+                            onFrameworkClick={framework => {
+                                setSelFramework(framework);
+                                scrollIntoView()
+                            }}
                         />
                     </Grid>
                 ))}

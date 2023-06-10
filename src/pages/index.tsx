@@ -23,6 +23,9 @@ import ProjectsSection from '@/components/ProjectsSection'
 import { aggregateSkills } from '@/data/skills'
 import SkillsGroup from '@/components/SkillsGroup'
 import { useMemo } from 'react'
+import { getLanguageColors } from '@/data/langs'
+import ChipCircleIcon from '@/components/ChipCircleIcon'
+import Head from 'next/head'
 import LanguageChart from '@/components/LanguageChart'
 
 export async function getStaticProps() {
@@ -32,6 +35,7 @@ export async function getStaticProps() {
   const tagline = await getUserTagline()
   const topLangsList = Array.from(topLangs.entries()).sort((l1,l2)=>l2[1]-l1[1])
   const {personalSkills, techSkills, langs, frameworks, platforms} = aggregateSkills(topLangsList, projects, courses, jobs)
+  const langColors = await getLanguageColors(langs)
 
   return {
     props: {
@@ -43,13 +47,14 @@ export async function getStaticProps() {
       techSkills,
       langs,
       topLangs: topLangsList,
+      langColorsList: Array.from(langColors.entries()),
       frameworks,
       platforms
     }
   }
 }
 
-export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, topLangs, frameworks, platforms}: {
+export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, topLangs, langColorsList, frameworks, platforms}: {
   tagline: string, 
   projects: Project[], 
   jobs: Experience[], 
@@ -58,6 +63,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
   techSkills: string[],
   langs: string[],
   topLangs: [string, number][],
+  langColorsList: [string, string][],
   frameworks: string[],
   platforms: string[]
 }) {
@@ -70,7 +76,11 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
     [techSkills, platforms]
   )
 
-  return (
+  const langColors = useMemo(() => new Map(langColorsList), [langColorsList])
+  return <>
+    <Head>
+      <title>{`Portfolio | Rohan Khayech - ${tagline}`}</title>
+    </Head>
     <main>
       <Stack
         direction="column"
@@ -110,7 +120,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
               width: largeScreen ? "75%" : "auto"
             }}
           >
-            <ProjectsSection projects={projects}/>
+            <ProjectsSection projects={projects} langColors={langColors}/>
             <Section title="Education">
               <Grid container>
                 {courses.map(course => (
@@ -150,5 +160,5 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
         <Typography alignSelf={'center'} variant='caption'>Copyright © {(new Date()).getFullYear()} Rohan Khayech</Typography>
       </Stack>
     </main>
-  )
+  </>
 }
