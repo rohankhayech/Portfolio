@@ -1,4 +1,4 @@
-import { Chip, Stack, SxProps, Theme, Typography } from "@mui/material"
+import { Chip, Stack, SxProps, Theme, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { useMemo } from "react"
 import ChipCircleIcon from "./ChipCircleIcon"
 
@@ -26,8 +26,18 @@ export default function LanguageChart(props: {
         [props.langs, props.maxLangs, threshold]
     )
 
+    const theme = useTheme()
+    const xs = useMediaQuery(theme.breakpoints.down('sm'))
+    const md = useMediaQuery(theme.breakpoints.down('lg'))
+    const lg = useMediaQuery(theme.breakpoints.down('xl'))    
+
     // Highest code percentage.
     const highest = langs[0][1]
+
+    const smallThreshold = 
+        xs ? highest / 5 : 
+        md ? highest / 4 : 
+        lg ? highest / 4 : highest / 2
 
     return (
         <Stack
@@ -47,7 +57,7 @@ export default function LanguageChart(props: {
                 </Stack>
                 <Stack spacing={1} sx={{ width: "100%" }}>
                     {langs.map(lang => {
-                        const small = (lang[1] < highest / 2)
+                        const small = (lang[1] < smallThreshold)
                         return <Stack key={lang[0]} direction="row" alignItems="center" spacing={1}>
                             <Chip size="small" label={!small ? `${lang[1].toFixed(1)}%`:undefined} key={lang[0]} sx={{ backgroundColor: props.langColors.get(lang[0]), width: `${lang[1] / highest * 100}%` }} />
                             {small &&

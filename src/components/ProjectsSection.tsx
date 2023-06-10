@@ -59,7 +59,7 @@ export default function ProjectsSection(props: {
             <Grid container>
                 {fProjects.map(project => (
                     <Grid item
-                        key={'p-${project.name}'}
+                        key={project.name}
                         xs={12} md={6} xl={4}
                         sx={{ paddingRight: 2, paddingBottom: 2 }}
                     >

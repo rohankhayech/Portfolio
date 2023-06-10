@@ -139,7 +139,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
               <Grid container>
                 {courses.map(course => (
                   <Grid item
-                    key={`c-${course.title}`}
+                    key={course.title}
                     xs={12} md={6} xl={4}
                     sx={{ paddingRight: 2, paddingBottom: 2 }}
                   >
@@ -152,7 +152,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
               <Grid container>
                 {jobs.map(job => (
                   <Grid item
-                    key={`j-${job.title}`}
+                    key={job.title}
                     xs={12} md={6} xl={4}
                     sx={{ paddingRight: 2, paddingBottom: 2 }}
                   >
@@ -162,12 +162,20 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
               </Grid>
             </Section>
             <Section title="Skills">
-              <Stack direction={mobile ? "column" : "row"} spacing={4} paddingBottom={2}>
-                <LanguageChart langs={langs} langColors={langColors} sx={{ width: "100%" }} />
-                <SkillsGroup title="Frameworks" skills={frameworks} />
-                <SkillsGroup title="Technical Skills" skills={tech} />
-                <SkillsGroup title="Interpersonal Skills" skills={personalSkills} />
-              </Stack>
+              <Grid container paddingBottom={2}>
+                <Grid item xs={12} sm={6} lg={3} sx={{ paddingRight: 4, paddingBottom: 4 }}>
+                    <LanguageChart langs={langs} langColors={langColors} sx={{ width: "100%" }} />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={3} sx={{ paddingRight: 4, paddingBottom: 4 }}>
+                    <SkillsGroup title="Frameworks" skills={frameworks} />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={3} sx={{ paddingRight: 4, paddingBottom: 4 }}>
+                    <SkillsGroup title="Technical Skills" skills={tech} />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={3} sx={{ paddingRight: 4, paddingBottom: 4 }}>
+                    <SkillsGroup title="Interpersonal Skills" skills={personalSkills} />
+                </Grid>
+              </Grid>
             </Section>
           </Stack>
         </Stack>
