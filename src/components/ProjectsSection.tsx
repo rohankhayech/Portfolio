@@ -1,11 +1,10 @@
 /* Copyright (c) 2023 Rohan Khayech */
 
-import { Chip, Grid, Stack } from "@mui/material";
+import { Button, Chip, Collapse, Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
 import Section from "./Section";
 import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
 import ProjectCard from "./ProjectCard";
-import { useCallback, useMemo, useState } from "react";
-import { platform } from "os";
+import { useMemo, useState } from "react";
 
 /**
  * UI section displaying the specified list of software projects 
@@ -19,14 +18,21 @@ export default function ProjectsSection(props: {
     projects: Project[], 
     langColors: Map<string, string>
 }) : JSX.Element {
-    
+    // Expanded state
+    const [expanded, setExpanded] = useState(false)
+    const theme = useTheme()
+    const largeScreen = useMediaQuery(theme.breakpoints.up("xl"))
+    const showAll = expanded || largeScreen
+
     // Filter selection state.
     const [selType, setSelType] = useState<ProjectType | undefined>(undefined) 
     const [selLang, setSelLang] = useState<string|undefined>(undefined) 
     const [selPlat, setSelPlat] = useState<string | undefined>(undefined) 
     const [selFramework, setSelFramework] = useState<string | undefined>(undefined) 
+    
+    const filtered = (selType !== undefined || selLang !== undefined || selPlat !== undefined || selFramework !== undefined)
 
-    // Filtered projects.
+    // Filter projects.
     const fProjects = useMemo(() => 
         props.projects
             .filter(p => selType === undefined || p.type === selType)
@@ -36,58 +42,92 @@ export default function ProjectsSection(props: {
         [props.projects, selFramework, selLang, selPlat, selType]
     )
 
+    // Project grid element.
+    const projectGrid = <Grid container key="project-grid">
+        {fProjects.map(project => (
+            <Grid item
+                key={project.name}
+                xs={12} md={6} xl={4}
+                sx={{ paddingRight: 2, paddingBottom: 2 }}
+            >
+                <ProjectCard
+                    project={project}
+                    langColors={props.langColors}
+                    onTypeClick={() => {
+                        setSelType(project.type);
+                        scrollIntoView();
+                    }}
+                    onLangClick={lang => {
+                        setSelLang(lang);
+                        scrollIntoView();
+                    }}
+                    onPlatClick={platform => {
+                        setSelPlat(platform);
+                        scrollIntoView();
+                    }}
+                    onFrameworkClick={framework => {
+                        setSelFramework(framework);
+                        scrollIntoView();
+                    }} />
+            </Grid>
+        ))}
+    </Grid>
+
+    // Component
+    const COLLAPSED_MASK_IMG = "linear-gradient(to bottom, black 85%, transparent 100%"
+    return (
+        <Section title='Software Portfolio' sx={{ marginRight: 2 }}>
+            { filtered && <>
+                <FilterBar
+                    selType={selType}
+                    selLang={selLang}
+                    selPlat={selPlat}
+                    selFramework={selFramework}
+                    onClearType={() => setSelType(undefined)}
+                    onClearLang={() => setSelLang(undefined)}
+                    onClearPlat={() => setSelPlat(undefined)}
+                    onClearFramework={() => setSelFramework(undefined)} 
+                />
+                {projectGrid}
+            </>}
+            { !filtered && <>
+                <Collapse
+                    in={showAll}
+                    collapsedSize={600}
+                    style={showAll ? {} : {
+                        maskImage: COLLAPSED_MASK_IMG,
+                        WebkitMaskImage: COLLAPSED_MASK_IMG
+                    }}
+                    sx={{ width: "100%" }}
+                >
+                    {projectGrid}
+                </Collapse>
+                {!largeScreen &&
+                    <div 
+                        style={{
+                            marginTop: theme.spacing(showAll ? 0 : 2),
+                            marginRight: theme.spacing(2)
+                        }}
+                    >
+                        <Button
+                            sx={{ width: "100%" }}
+                            variant="text"
+                            onClick={() => { setExpanded((expanded) => !expanded); } }
+                        >
+                            {expanded ? "View Less" : "View All"}
+                        </Button>
+                    </div>
+                }
+            </>}
+        </Section>
+    )
+
     function scrollIntoView() {
         const element = document.getElementById("software-portfolio")
         if (element) {
-            element.scrollIntoView({behavior: "smooth"})
+            element.scrollIntoView({ behavior: "smooth" })
         }
     }
-
-    // Component
-    return (
-        <Section title='Software Portfolio' sx={{marginRight: 2}}>
-            <FilterBar 
-                selType={selType}
-                selLang={selLang}
-                selPlat={selPlat}
-                selFramework={selFramework}
-                onClearType={() => setSelType(undefined)}
-                onClearLang={()=> setSelLang(undefined)}
-                onClearPlat={() => setSelPlat(undefined)}
-                onClearFramework={() => setSelFramework(undefined)}
-            />
-            <Grid container>
-                {fProjects.map(project => (
-                    <Grid item
-                        key={project.name}
-                        xs={12} md={6} xl={4}
-                        sx={{ paddingRight: 2, paddingBottom: 2 }}
-                    >
-                        <ProjectCard 
-                            project={project}
-                            langColors={props.langColors}
-                            onTypeClick={() => { 
-                                setSelType(project.type); 
-                                scrollIntoView() 
-                            }}
-                            onLangClick={lang => {
-                                setSelLang(lang);
-                                scrollIntoView()
-                            }}
-                            onPlatClick={platform => {
-                                setSelPlat(platform);
-                                scrollIntoView()
-                            }}
-                            onFrameworkClick={framework => {
-                                setSelFramework(framework);
-                                scrollIntoView()
-                            }}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
-        </Section>
-    )
 }
 
 /**

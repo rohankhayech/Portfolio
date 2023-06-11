@@ -14,8 +14,6 @@ export default function Section({title, children, sx} : PropsWithChildren<Sectio
         <section id={title.toLowerCase().replace(" ", "-")} style={{width: "100%"}}>
             <Stack
                 direction="column"
-                justifyContent="flex-start"
-                alignItems="flex-start"
                 spacing={2}
                 sx={sx}
             >
