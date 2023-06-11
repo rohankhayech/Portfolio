@@ -4,7 +4,7 @@ import { Button, Chip, Collapse, Grid, Stack, useMediaQuery, useTheme } from "@m
 import Section from "./Section";
 import Project, { ProjectType, getProjectTypeName } from "@/model/Project";
 import ProjectCard from "./ProjectCard";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 /**
  * UI section displaying the specified list of software projects 
@@ -18,10 +18,15 @@ export default function ProjectsSection(props: {
     projects: Project[], 
     langColors: Map<string, string>
 }) : JSX.Element {
-    // Expanded state
-    const [expanded, setExpanded] = useState(false)
     const theme = useTheme()
     const largeScreen = useMediaQuery(theme.breakpoints.up("xl"))
+
+    // Expanded state
+    const [expanded, setExpanded] = useState(true)
+    useEffect(() => {
+        if (!largeScreen) setExpanded(false)
+    }, [largeScreen])
+    
     const showAll = expanded || largeScreen
 
     // Filter selection state.
