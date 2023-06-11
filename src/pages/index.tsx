@@ -100,11 +100,12 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
         direction="column"
         spacing={4}
         sx = {{
-          marginX: largeScreen ? 8 : 4,
+          marginLeft: largeScreen ? 8 : 4,
+          marginRight: largeScreen ? 4 : 0,
           marginY: 4
         }}
       >
-        <Alert severity="warning" sx={{width: "100%"}}>
+        <Alert severity="warning" sx={{marginRight: 4}}>
           <AlertTitle>Work in Progress</AlertTitle>
           I&apos;m currently building this website to learn <em>React</em>, <em>Next.js</em> and web development best practices. 
           <br/>
@@ -120,7 +121,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
           >
             <Header name="Rohan Khayech" tagline={tagline} profileImgSrc="https://avatars.githubusercontent.com/rohankhayech" />
             <Section title='About Me'>
-              <Typography variant="body1">
+              <Typography variant="body1" paddingRight={largeScreen ? 0 : 4}>
                 I am a passionate software engineering graduate from Curtin University, with an interest in Java/Kotlin, Android development and user interface design.
                 <br/><br/>
                 Recently I have been working on a variety of software engineering projects to learn and gain experience with the latest software development frameworks, constantly improving my skills in programming and project management.
@@ -135,7 +136,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
             }}
           >
             <ProjectsSection projects={projects} langColors={langColors}/>
-            <Section title="Education">
+            <Section title="Education" sx={{marginRight: 2}}>
               <Grid container>
                 {courses.map(course => (
                   <Grid item
@@ -148,7 +149,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
                 ))}
               </Grid>
             </Section>
-            <Section title="Work Experience">
+            <Section title="Work Experience" sx={{ marginRight: 2 }}>
               <Grid container>
                 {jobs.map(job => (
                   <Grid item
@@ -162,7 +163,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
               </Grid>
             </Section>
             <Section title="Skills">
-              <Grid container paddingBottom={2} marginRight={-4} marginBottom={-4}>
+              <Grid container>
                 <Grid item xs={12} sm={6} lg={3} sx={{ paddingRight: 4, paddingBottom: 4 }}>
                     <LanguageChart langs={langs} langColors={langColors} sx={{ width: "100%" }} />
                 </Grid>
@@ -179,7 +180,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
             </Section>
           </Stack>
         </Stack>
-        <Typography alignSelf={'center'} variant='caption'>Copyright © {(new Date()).getFullYear()} Rohan Khayech</Typography>
+        <Typography alignSelf={'center'} variant='caption' paddingRight={4}>Copyright © {(new Date()).getFullYear()} Rohan Khayech</Typography>
       </Stack>
     </main>
   </>

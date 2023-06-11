@@ -17,7 +17,7 @@ export default function Header({name, tagline, profileImgSrc}: HeaderProps) {
     const vertical = mobile || largeScreen
 
     return (
-        <header style={{ width: "100%" }}>
+        <header style={{ width: "100%", paddingRight: mobile ? 32 : 0}}>
             <Stack
                 direction={vertical ? "column" : "row"}
                 //justifyItems={mobile ? "center" : "flex-start"}
