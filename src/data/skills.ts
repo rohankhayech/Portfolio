@@ -23,7 +23,7 @@ export function aggregateSkills(
     const projectLangs = topLangs
 
     // Combine all projects and experiences into an array.
-    const all = [projects, courses, jobs].flat()
+    const all = [...projects, ...courses, ...jobs]
 
     // Combine each category of skills.
     const personalSkills = combineSkills(all, x => x.personalSkills)
@@ -37,7 +37,7 @@ export function aggregateSkills(
         .map<[string, number]>(l => [l, 0]) // Convert to pair. 
     
     // Combine with sorted project list first to preserve order.
-    const langs = [projectLangs, expLangs].flat()
+    const langs = [...projectLangs, ...expLangs]
 
     return {
         personalSkills: personalSkills,
