@@ -55,10 +55,14 @@ export default function Header({name, username, tagline, profileImgSrc, linkedIn
                     paddingRight={vertical ? 0 : 1}
                 >
                     <IconButton href={`https://github.com/${username}`}>
-                        <Image width={24} height={24} src={theme.palette.mode === 'light' ? "/github-mark.svg" : "/github-mark-white.svg"} alt="Github Profile"/>
+                        <picture>
+                            <img width={24} height={24} src={theme.palette.mode === 'light' ? "github-mark.svg" : "github-mark-white.svg"} alt="Github Profile"/>
+                        </picture>
                     </IconButton>
                     <IconButton href={linkedInURL}>
-                        <Image style={{filter: theme.palette.mode === "light" ? "invert()" : "" }} width={24*(635/540)} height={24} src="/LI-In-Bug-White.png" alt="LinkedIn Profile" />
+                        <picture>
+                            <img style={{filter: theme.palette.mode === "light" ? "invert()" : "" }} width={24*(635/540)} height={24} src="LI-In-Bug-White.png" alt="LinkedIn Profile" />
+                        </picture>
                     </IconButton>
                 </Stack>
             </Stack>
