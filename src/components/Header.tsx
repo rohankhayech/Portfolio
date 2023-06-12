@@ -7,11 +7,13 @@ import Image from 'next/image';
 
 interface HeaderProps {
     name: string,
+    username: string,
     tagline: string,
-    profileImgSrc: string
+    profileImgSrc: string,
+    linkedInURL: string
 }
 
-export default function Header({name, tagline, profileImgSrc}: HeaderProps) {
+export default function Header({name, username, tagline, profileImgSrc, linkedInURL}: HeaderProps) {
     const theme = useTheme()
     const mobile = useMediaQuery(theme.breakpoints.down('sm'))
     const largeScreen = useMediaQuery(theme.breakpoints.up('xl'))
@@ -52,10 +54,10 @@ export default function Header({name, tagline, profileImgSrc}: HeaderProps) {
                     spacing={1}
                     paddingRight={vertical ? 0 : 1}
                 >
-                    <IconButton href='https://github.com/rohankhayech'>
+                    <IconButton href={`https://github.com/${username}`}>
                         <Image width={24} height={24} src={theme.palette.mode === 'light' ? "/github-mark.svg" : "/github-mark-white.svg"} alt="Github Profile"/>
                     </IconButton>
-                    <IconButton href='https://www.linkedin.com/in/rohan-khayech-356b01228/'>
+                    <IconButton href={linkedInURL}>
                         <Image style={{filter: theme.palette.mode === "light" ? "invert()" : "" }} width={24*(635/540)} height={24} src="/LI-In-Bug-White.png" alt="LinkedIn Profile" />
                     </IconButton>
                 </Stack>

@@ -14,7 +14,7 @@ import {
 import Header from '@/components/Header'
 import Section from '@/components/Section'
 import ExperienceCard from '@/components/ExperienceCard'
-import { getUserTagline } from '@/data/github'
+import { getUserInfo } from '@/data/github'
 import { getAllProjects } from '@/data/projects'
 import Project from '@/model/Project'
 import { getCourses, getJobs } from '@/data/experiences'
@@ -26,12 +26,15 @@ import { useMemo } from 'react'
 import { getLanguageColors } from '@/data/langs'
 import Head from 'next/head'
 import LanguageChart from '@/components/LanguageChart'
+import loadConfig from '@/data/config'
 
 export async function getStaticProps() {
+  // Load config
+  const config = await loadConfig()
   
   // Fetch data
-  const tagline = getUserTagline()
-  const {projects, topLangs} = await getAllProjects()
+  const profile = await getUserInfo()
+  const {projects, topLangs} = await getAllProjects(profile.username, config.excludedLanguages)
   const jobs = await getJobs()
   const courses = await getCourses()
   const topLangsList = Array.from(topLangs.entries()).sort((l1,l2)=>l2[1]-l1[1])
@@ -55,7 +58,8 @@ export async function getStaticProps() {
 
   return {
     props: {
-      tagline: await tagline,
+      config,
+      profile,
       projects,
       jobs,
       courses,
@@ -69,8 +73,9 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({tagline, projects, jobs, courses, personalSkills, techSkills, langs, langColorsList, frameworks, platforms}: {
-  tagline: string, 
+export default function Home({config, profile, projects, jobs, courses, personalSkills, techSkills, langs, langColorsList, frameworks, platforms}: {
+  config: Config,
+  profile: Profile,
   projects: Project[], 
   jobs: Experience[], 
   courses: Experience[],
@@ -93,7 +98,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
   const langColors = useMemo(() => new Map(langColorsList), [langColorsList])
   return <>
     <Head>
-      <title>{`Portfolio | Rohan Khayech - ${tagline}`}</title>
+      <title>{`Portfolio | ${profile.displayName} - ${profile.tagline}`}</title>
     </Head>
     <main>
       <Stack
@@ -109,7 +114,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
           <AlertTitle>Work in Progress</AlertTitle>
           I&apos;m currently building this website to learn <em>React</em>, <em>Next.js</em> and web development best practices. 
           <br/>
-          <strong> Please see my <Link href="https://github.com/rohankhayech">GitHub</Link> and <Link href="https://www.linkedin.com/in/rohan-khayech-356b01228/">LinkedIn</Link> profiles for my up-to-date portfolio and contact information.</strong>
+          <strong> Please see my <Link href={`https://github.com/${profile.username}`}>GitHub</Link> and <Link href={config.linkedInURL}>LinkedIn</Link> profiles for my up-to-date portfolio and contact information.</strong>
         </Alert>
         <Stack direction={largeScreen ? "row" : "column"} spacing={largeScreen ? 8 : 3}>
           <Stack
@@ -119,7 +124,13 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
               width: largeScreen ? "25%" : "auto"
             }}
           >
-            <Header name="Rohan Khayech" tagline={tagline} profileImgSrc="https://avatars.githubusercontent.com/rohankhayech" />
+            <Header 
+              name={profile.displayName} 
+              username={profile.username} 
+              tagline={profile.tagline} 
+              profileImgSrc={`https://avatars.githubusercontent.com/${profile.username}`} 
+              linkedInURL={config.linkedInURL}
+            />
             <Section title='About Me'>
               <Typography variant="body1" paddingRight={largeScreen ? 0 : 4}>
                 I am a passionate software engineering graduate from Curtin University, with an interest in Java/Kotlin, Android development and user interface design.
@@ -168,7 +179,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
                     <LanguageChart langs={langs} langColors={langColors} sx={{ width: "100%" }} />
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3} sx={{ paddingRight: 4, paddingBottom: 4 }}>
-                    <SkillsGroup title="Frameworks" skills={frameworks} />
+                    <SkillsGroup title="Technology Experience" skills={frameworks} />
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3} sx={{ paddingRight: 4, paddingBottom: 4 }}>
                     <SkillsGroup title="Technical Skills" skills={tech} />
@@ -180,7 +191,7 @@ export default function Home({tagline, projects, jobs, courses, personalSkills, 
             </Section>
           </Stack>
         </Stack>
-        <Typography alignSelf={'center'} variant='caption' paddingRight={4}>Copyright © {(new Date()).getFullYear()} Rohan Khayech</Typography>
+        <Typography alignSelf={'center'} variant='caption' paddingRight={4}>Copyright © {(new Date()).getFullYear()} {profile.displayName}</Typography>
       </Stack>
     </main>
   </>

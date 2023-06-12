@@ -29,7 +29,7 @@ export default function ExperienceCard(props: {experience: Experience, icon: str
                             <TagChipGroup items={props.experience.langs} title="Language Experience" leadingIcon="data_object" />
                         }
                         {props.experience.frameworks &&
-                            <TagChipGroup items={props.experience.frameworks} title="Framework/Library Experience"  leadingIcon="dynamic_form" />
+                            <TagChipGroup items={props.experience.frameworks} title="Technology Experience"  leadingIcon="dynamic_form" />
                         }
                         {props.experience.platforms &&
                             <TagChipGroup items={props.experience.platforms} title="Platform Development Experience" leadingIcon="devices" />

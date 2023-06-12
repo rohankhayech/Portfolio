@@ -77,7 +77,7 @@ export default function ProjectCard(props: {
                             onClick={props.onLangClick} 
                         />
                         <TagChipGroup items={props.project.platforms} title="Platforms" leadingIcon="devices" onClick={props.onPlatClick} />
-                        <TagChipGroup items={props.project.frameworks} title="Frameworks/Libraries" leadingIcon="dynamic_form" onClick={props.onFrameworkClick} />
+                        <TagChipGroup items={props.project.frameworks} title="Technology Stack" leadingIcon="dynamic_form" onClick={props.onFrameworkClick} />
                     </Stack>
                 </Stack>
             </CardContent>

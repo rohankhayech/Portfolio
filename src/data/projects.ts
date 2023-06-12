@@ -9,11 +9,11 @@ import path from "path";
  * Collates a list of merged projects from the user's Github repositories and from file.
  * @returns The list of merged projects.
  */
-export async function getAllProjects(): Promise<{
+export async function getAllProjects(username: string, excludedLanguages?: string[]): Promise<{
     projects: Project[],
     topLangs: Map<string, number>
 }> {
-    const repoProjects = getGitHubProjects()
+    const repoProjects = getGitHubProjects(username, excludedLanguages)
     const localProjects = loadLocalProjects()
 
     const {projects, langs} = await repoProjects

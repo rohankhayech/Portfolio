@@ -1,0 +1,7 @@
+{
+    "linkedInURL" : "https://www.linkedin.com/in/rohan-khayech-356b01228/",
+    "excludedLanguages": [
+        "Makefile",
+        "Dockerfile"
+    ]
+}

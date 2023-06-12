@@ -17,13 +17,13 @@ const gh = restEndpointMethods(octokit).rest
  * Collates a list of projects based on the owner's GitHub repositories.
  * @returns A list of projects based on the owner's GitHub repositories.
  */
-export async function getGitHubProjects(): Promise<{
+export async function getGitHubProjects(username: string, excludedLanguages?: string[]): Promise<{
     projects: Map<string, Project>,
     langs: Map<string, number>
 }> {
     // Retrieve list of repos from GitHub REST API.
     const res = await gh.repos.listForUser({
-        username: "rohankhayech",
+        username: username,
         type: "owner"
     })
     const repos = res.data
@@ -37,12 +37,12 @@ export async function getGitHubProjects(): Promise<{
 
     // Collate list of projects.
     const projects: Project[] = await Promise.all(repos
-        ?.filter((repo: any) => repo.name != 'rohankhayech')
+        ?.filter((repo: any) => repo.name !== username)
         .map(async (repo: any) => {
             const {type, platforms, frameworks, techSkills} = processRepoTopics(repo.topics, allPlatforms, allFrameworks, allTechSkills)
             
             // Process languages and update total code bytes
-            const langs = await getRepoLanguages(repo.name)
+            const langs = await getRepoLanguages(username, repo.name, excludedLanguages)
             langs.forEach(l => {
                 if (allLanguages.has(l[0])) {
                     allLanguages.set(l[0], allLanguages.get(l[0])!+l[1])
@@ -88,23 +88,27 @@ function formatProjectName(name: string): string {
  * @param name The name of the repository.
  * @returns A list of the languages used in the repository,
  */
-async function getRepoLanguages(name: string): Promise<[string, number][]> {
+async function getRepoLanguages(username: string, repoName: string, excludedLanguages?: string[]): Promise<[string, number][]> {
     // Request language list from GitHub API
     const res = await gh.repos.listLanguages({
-        owner: "rohankhayech",
-        repo: name
+        owner: username,
+        repo: repoName
     })
 
     // Parse and filter languages from response
     // Return map of languages and their bytes of code.
     return Object.entries(res.data)
-        .filter(lang => lang[0] != 'Makefile' && lang[0] != 'Dockerfile')
+        .filter(lang => excludedLanguages === undefined || !excludedLanguages.includes(lang[0]))
         .map(lang => [capitalise(lang[0]), lang[1]!])
 }
 
-export async function getUserTagline(): Promise<string> {
+export async function getUserInfo(): Promise<Profile> {
     const res = await gh.users.getAuthenticated()
-    return res.data.bio ?? ""
+    return {
+        username: res.data.login,
+        displayName: res.data.name ?? res.data.login,
+        tagline: res.data.bio ?? ""
+    }
 }
 
 /**
