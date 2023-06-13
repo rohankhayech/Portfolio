@@ -145,6 +145,7 @@ function processRepoTopics(
                 type = ProjectType.LIB
                 break;
             case 'university':
+            case 'assignment':
                 type = ProjectType.UNI
                 break;
             default:
