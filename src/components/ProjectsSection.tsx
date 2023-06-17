@@ -84,6 +84,7 @@ export default function ProjectsSection(props: {
         <Section title='Software Portfolio' sx={{ marginRight: 2 }}>
             { filtered && <>
                 <FilterBar
+                    filtered={filtered}
                     selType={selType}
                     selLang={selLang}
                     selPlat={selPlat}
@@ -137,6 +138,7 @@ export default function ProjectsSection(props: {
 
 /**
  * UI bar displaying the currently selected filters and buttons to clear them.
+ * @param props.filtered Whether there are any active filters selected.
  * @param props.selType The currently selected project type filter.
  * @param props.selLang The currently selected language filter.
  * @param props.selPlat The currently selected platform filter.
@@ -147,6 +149,7 @@ export default function ProjectsSection(props: {
  * @param onClearFramework Called when the user clears the framework filter.
  */
 function FilterBar(props: {
+    filtered: boolean,
     selType: ProjectType | undefined,
     selLang: string | undefined,
     selPlat: string | undefined,
@@ -167,7 +170,7 @@ function FilterBar(props: {
             {props.selLang && <Chip label={`Language: ${props.selLang}`} onDelete={props.onClearLang}/>}
             {props.selPlat && <Chip label={`Platform: ${props.selPlat}`} onDelete={props.onClearPlat} />}
             {props.selFramework && <Chip label={`Built with: ${props.selFramework}`} onDelete={props.onClearFramework} />}
-            {(props.selLang || props.selPlat || props.selFramework) &&
+            {props.filtered &&
                 <Chip 
                     label="Clear" 
                     clickable 
